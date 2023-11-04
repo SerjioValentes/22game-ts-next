@@ -239,6 +239,7 @@ const FirstSection = () => {
   };
   return (
     <Grid container spacing={2}>
+      {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
       <Grid xs={3} item>
         <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
         <Box sx={{
@@ -269,7 +270,9 @@ const FirstSection = () => {
           ))}
         </Box>
       </Grid>
+      {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
 
+      {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
       <Grid xs={3} item>
         <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
         {inputList.sellFunnel_01.map((item) => (
@@ -311,6 +314,7 @@ const FirstSection = () => {
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
+        {/* Start ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- Start */}
         <Stack
           direction="row"
           spacing={2}
@@ -337,7 +341,7 @@ const FirstSection = () => {
             Убавить
           </Button>
         </Stack>
-
+        {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- End */}
         {inputList.sellFunnel_03.map((item) => (
           <MuiInputTextField
             InputProps={{
@@ -358,7 +362,9 @@ const FirstSection = () => {
           />
         ))}
       </Grid>
+      {/* End ---------------- ВОРОНКА ПРОДАЖ --------------- End */}
 
+      {/* Start ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- Start */}
       <Grid
         xs={3}
         item
@@ -407,6 +413,7 @@ const FirstSection = () => {
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
+          {/* Start ---------------- ДОБАВИТЬ/УБАВИТЬ - переменные расходы --------------- Start */}
           <Stack
             display="flex"
             direction="row"
@@ -434,7 +441,9 @@ const FirstSection = () => {
               Убавить
             </Button>
           </Stack>
+          {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
         </Grid>
+        {/* End ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- End */}
       </Grid>
       <Grid
         xs={3}

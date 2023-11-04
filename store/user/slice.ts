@@ -30,6 +30,7 @@ const initialState: UserInitialState = {
     sellFunnel_02_CV3: '',
     sellFunnel_02_ConstantClients: '',
     sellFunnel_02_TotalSells: '',
+    sellFunnel_02_RegularPayClients: 0,
     sellFunnel_03_MedBill: '',
     sellFunnel_03_Revenue: '',
     variableCosts_Sells: '',

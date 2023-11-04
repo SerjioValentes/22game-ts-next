@@ -37,7 +37,7 @@ const inputList = {
       inputProps: 'P',
     },
     {
-      label: 'Разовая выручка',
+      label: 'Выручка',
       functionConst: 'firstFun_OnceRevenue',
       disabled: true,
       inputProps: 'P',
@@ -147,13 +147,13 @@ const inputList = {
       inputProps: '%',
     },
     {
-      label: 'Итого % от выручки',
+      label: 'Итого от выручки',
       functionConst: 'variableCosts_TotalPercent',
       disabled: true,
       inputProps: '%',
     },
     {
-      label: 'Итого переменные',
+      label: 'Итого',
       functionConst: 'variableCosts_TotalCosts',
       disabled: true,
       inputProps: '',
@@ -185,7 +185,7 @@ const inputList = {
       inputProps: '',
     },
     {
-      label: 'Итого постоянный',
+      label: 'Итого',
       functionConst: 'constantCosts_TotalCosts',
       disabled: true,
       inputProps: 'P',

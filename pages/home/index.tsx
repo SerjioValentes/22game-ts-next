@@ -9,13 +9,17 @@ const HomePage = () => (
   <Box sx={{
     backgroundImage: 'url(/assets/bg/background.jpg)',
     width: '100%',
+    height: '100vh',
   }}
   >
-    <Stack spacing={4}>
+    <Stack>
       <Box>
         <Header />
       </Box>
-      <Box>
+      <Box sx={{
+        p: 4,
+      }}
+      >
         <FirstSection />
       </Box>
     </Stack>

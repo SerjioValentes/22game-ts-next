@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable */
-
 import RightMenuDrawer from '@/components/molecule/Drawer';
 import { getNormalNumber } from '@/helpers/utils/restyling';
 // import getNumberWithSpaces from '@/helpers/utils/restyling';
@@ -92,7 +90,6 @@ const Header = () => {
       p: 4,
       gap: 4,
       backgroundColor: 'secondary.main',
-
     }}
     >
       <Button
@@ -110,44 +107,43 @@ const Header = () => {
       <RightMenuDrawer
         savedNotes={savedNotes}
       />
-      {/* <Typography variant="h5">22Game.ru</Typography> */}
 
       <TextField
-       InputLabelProps={{
-        style: {
-          fontSize: 12,
-        },
-      }} 
+        InputLabelProps={{
+          style: {
+            fontSize: 12,
+          },
+        }}
         label="Имя"
         value={gameMainValues.name}
         onChange={(e: any) => handleOnChange(e, 'name')}
       />
       <TextField
-       InputLabelProps={{
-        style: {
-          fontSize: 12,
-        },
-      }} 
+        InputLabelProps={{
+          style: {
+            fontSize: 12,
+          },
+        }}
         label="Бизнес"
         value={gameMainValues.bussiness}
         onChange={(e: any) => handleOnChange(e, 'bussiness')}
       />
       <TextField
-       InputLabelProps={{
-      style: {
-        fontSize: 12,
-      },
-    }} 
+        InputLabelProps={{
+          style: {
+            fontSize: 12,
+          },
+        }}
         label="Цель на игру"
         value={gameMainValues.gamePlan}
         onChange={(e: any) => handleOnChange(e, 'gamePlan')}
       />
       <TextField
-       InputLabelProps={{
-      style: {
-        fontSize: 12,
-      },
-    }} 
+        InputLabelProps={{
+          style: {
+            fontSize: 12,
+          },
+        }}
         label="Запрос на игру"
         value={gameMainValues.gameRequest}
         onChange={(e: any) => handleOnChange(e, 'gameRequest')}
