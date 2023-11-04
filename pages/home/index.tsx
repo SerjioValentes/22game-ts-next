@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import FirstSection from '@/components/organism/HomePage/FirstSection';
+import Header from '@/components/organism/Header';
 
 const HomePage = () => (
   <Box sx={{
@@ -10,9 +11,14 @@ const HomePage = () => (
     width: '100%',
   }}
   >
-    <Box sx={{ p: 4 }}>
-      <FirstSection />
-    </Box>
+    <Stack spacing={4}>
+      <Box>
+        <Header />
+      </Box>
+      <Box>
+        <FirstSection />
+      </Box>
+    </Stack>
   </Box>
 );
 export default HomePage;

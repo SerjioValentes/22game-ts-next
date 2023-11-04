@@ -9,7 +9,7 @@ import MuiInputTextField from '@/components/atom/Input';
 import inputList from '@/helpers/utils/inputs';
 import styled from '@emotion/styled';
 import { useAppDispatch } from '@/store';
-import { setAllRoundsData, setEachPlayerData, setSavedNotes as dispatchSetSavedNotes } from '@/store/user/slice';
+import { setEachPlayerData, setSavedNotes as dispatchSetSavedNotes } from '@/store/user/slice';
 import useAppSelector from '@/hooks/useAppSelector';
 import { getNormalNumber, getNumberWithSpaces } from '@/helpers/utils/restyling';
 import dependenceInputFields from './dependenceInputFields';
@@ -60,7 +60,6 @@ const FirstSection = () => {
   const [dialogNote, setDialogNote] = useState('');
 
   const dispatch = useAppDispatch();
-  const allRoundsData = useAppSelector((state) => state.user.allRoundsData);
   const eachUserData = useAppSelector((state) => state.user.data);
   const savedNotes = useAppSelector((state) => state.user.savedNotes);
 
@@ -70,10 +69,6 @@ const FirstSection = () => {
       ...prev,
       [functionConst]: getNumberWithSpaces(Math.round(value) || value),
     }));
-    // dispatch(setEachPlayerData({
-    //   ...eachUserData,
-    //   [functionConst]: getNumberWithSpaces(Math.round(value) || value),
-    // }));
   };
 
   const textFieldOnChange = (value: any, functionConst: string) => {
@@ -221,28 +216,6 @@ const FirstSection = () => {
     dispatch(setEachPlayerData(copyDisapatch));
   };
 
-  const endRound = () => {
-    const constantClients = getNormalNumber(inputValue.sellFunnel_02_ConstantClients);
-    const regularPayClients = getNormalNumber(inputValue.sellFunnel_02_RegularPayClients);
-    const dateCountRoundPayClients = {
-      ...inputValue,
-      sellFunnel_02_RegularPayClients: regularPayClients + constantClients,
-      round: inputValue.round + 1,
-      date: new Date().toISOString(),
-    };
-
-    window.localStorage.setItem('inputValue', JSON.stringify(inputValue));
-
-    setInputValue((prev: any) => ({
-      ...prev,
-      sellFunnel_02_RegularPayClients: regularPayClients + constantClients,
-      round: inputValue.round + 1,
-    }));
-
-    dispatch(setEachPlayerData(dateCountRoundPayClients));
-    dispatch(setAllRoundsData([...allRoundsData, dateCountRoundPayClients]));
-  };
-
   useEffect(() => {
     const winLocal = window.localStorage.getItem('inputValue');
     const localStorageSavedNotes = window.localStorage.getItem('savedNotes');
@@ -331,13 +304,6 @@ const FirstSection = () => {
 
   return (
     <Grid container spacing={2}>
-      {/* <Button onClick={() => {
-        console.log(savedNotes);
-      }}
-      >
-        show
-
-      </Button> */}
       <Grid xs={3} item>
         <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
         <Box sx={{
@@ -607,16 +573,6 @@ const FirstSection = () => {
         ))}
       </Grid>
 
-      <Button
-        variant="contained"
-        onClick={endRound}
-        fullWidth
-        sx={{
-          my: 4,
-        }}
-      >
-        Завершить ход
-      </Button>
       <Dialog onClose={handleClose} open={openDialog}>
         <Box sx={{
           p: 4,

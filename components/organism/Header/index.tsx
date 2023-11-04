@@ -88,10 +88,11 @@ const Header = () => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      maxWidth: '1200px',
-      m: 'auto',
+      width: '100%',
       p: 4,
       gap: 4,
+      backgroundColor: 'secondary.main',
+
     }}
     >
       <Button
@@ -112,21 +113,41 @@ const Header = () => {
       {/* <Typography variant="h5">22Game.ru</Typography> */}
 
       <TextField
+       InputLabelProps={{
+        style: {
+          fontSize: 12,
+        },
+      }} 
         label="Имя"
         value={gameMainValues.name}
         onChange={(e: any) => handleOnChange(e, 'name')}
       />
       <TextField
+       InputLabelProps={{
+        style: {
+          fontSize: 12,
+        },
+      }} 
         label="Бизнес"
         value={gameMainValues.bussiness}
         onChange={(e: any) => handleOnChange(e, 'bussiness')}
       />
       <TextField
+       InputLabelProps={{
+      style: {
+        fontSize: 12,
+      },
+    }} 
         label="Цель на игру"
         value={gameMainValues.gamePlan}
         onChange={(e: any) => handleOnChange(e, 'gamePlan')}
       />
       <TextField
+       InputLabelProps={{
+      style: {
+        fontSize: 12,
+      },
+    }} 
         label="Запрос на игру"
         value={gameMainValues.gameRequest}
         onChange={(e: any) => handleOnChange(e, 'gameRequest')}
