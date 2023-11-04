@@ -15,44 +15,6 @@ import { getNormalNumber, getNumberWithSpaces } from '@/helpers/utils/restyling'
 import dependenceInputFields from './dependenceInputFields';
 
 const FirstSection = () => {
-  const [inputValue, setInputValue] = useState<any>({
-    round: 0,
-    firstFun_Shows: '',
-    firstFun_CV1: '',
-    firstFun_Applications: '',
-    firstFun_CV2: '',
-    firstFun_Sells: '',
-    firstFun_MedBill: '',
-    firstFun_OnceRevenue: '',
-    firstFun_VariableCosts: '',
-    firstFun_Profit: '',
-    sellFunnel_01_Shows: '',
-    sellFunnel_01_CV1: '',
-    sellFunnel_01_Applications: '',
-    sellFunnel_01_CV2: '',
-    sellFunnel_01_Sells: '',
-    sellFunnel_02_CV3: '',
-    sellFunnel_02_ConstantClients: '',
-    sellFunnel_02_TotalSells: '',
-    sellFunnel_03_MedBill: '',
-    sellFunnel_03_Revenue: '',
-    variableCosts_Sells: '',
-    variableCosts_Exec: '',
-    variableCosts_Marketing: '',
-    variableCosts_Taxes: '',
-    variableCosts_TotalPercent: '',
-    variableCosts_TotalCosts: '',
-    constantCosts_FotOwner: '',
-    constantCosts_Fot: '',
-    constantCosts_CreditAll: '',
-    constantCosts_CreditPay: '',
-    constantCosts_TotalCosts: '',
-    mainCostsField_Costs: '',
-    mainCostsField_CoeffClearProfit: '',
-    mainCostsField_ClearProfit: '',
-    mainCostsField_MoneyFor: '',
-    mainCostsField_PersonalCapital: '',
-  });
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogValue, setDialogValue] = useState('');
 
@@ -64,114 +26,85 @@ const FirstSection = () => {
   const savedNotes = useAppSelector((state) => state.user.savedNotes);
 
   // TODO - change func name without set
-  const setStateHelper = (functionConst: string, value: number) => {
-    setInputValue((prev: any) => ({
-      ...prev,
-      [functionConst]: getNumberWithSpaces(Math.round(value) || value),
-    }));
-  };
+  // const dispatchHelper = (functionConst: string, value: number) => {
+  //   console.log(value);
+  //   console.log(functionConst);
+  //   dispatch(setEachPlayerData({
+  //     ...eachUserData,
+  //     [functionConst]: getNumberWithSpaces(Math.round(value) || value),
+  //   }));
+  // };
 
   const textFieldOnChange = (value: any, functionConst: string) => {
-    setStateHelper(functionConst, value);
-    const object = {
-      ...inputValue,
+    let disapatchCorrectValues = {
+      ...eachUserData,
       [functionConst]: value,
     };
 
-    let copyDisapatch = {
-      ...inputValue,
-      [functionConst]: value,
-    };
-
-    const totalCost = getNormalNumber(object.constantCosts_TotalCosts);
-    const earnings = getNormalNumber(object.sellFunnel_03_Revenue);
-    const sells = getNormalNumber(object.variableCosts_Sells);
-    const taxes = getNormalNumber(object.variableCosts_Taxes);
-    const obligations = getNormalNumber(object.variableCosts_Exec);
-    const marketing = getNormalNumber(object.variableCosts_Marketing);
-    const onceEarning = getNormalNumber(object.firstFun_OnceRevenue);
-    const totalCosts = getNormalNumber(object.constantCosts_TotalCosts);
-    const firstCv1 = getNormalNumber(object.firstFun_CV1);
-    const firstCv2 = getNormalNumber(object.firstFun_CV2);
-    const firstShows = getNormalNumber(object.sellFunnel_01_Shows);
-    const applications = getNormalNumber(object.sellFunnel_01_Applications);
-    const funnelSell = getNormalNumber(object.sellFunnel_01_Sells);
-    const funnelCv3 = getNormalNumber(object.sellFunnel_02_CV3);
-    const shows = getNormalNumber(object.firstFun_Shows);
-    const firstFunSells = getNormalNumber(object.firstFun_Sells);
-    const sellFunnelCv2 = getNormalNumber(object.sellFunnel_01_CV2);
-    const constantCostsFotOwner = getNormalNumber(object.constantCosts_FotOwner);
-    const constantCostsFot = getNormalNumber(object.constantCosts_Fot);
-    const sellBill = getNormalNumber(object.sellFunnel_03_MedBill);
-    const sellRegularPayClients = getNormalNumber(object.sellFunnel_02_RegularPayClients);
-    const sellConstantClients = getNormalNumber(object.sellFunnel_02_ConstantClients);
+    const totalCost = getNormalNumber(disapatchCorrectValues.constantCosts_TotalCosts);
+    const earnings = getNormalNumber(disapatchCorrectValues.sellFunnel_03_Revenue);
+    const sells = getNormalNumber(disapatchCorrectValues.variableCosts_Sells);
+    const taxes = getNormalNumber(disapatchCorrectValues.variableCosts_Taxes);
+    const obligations = getNormalNumber(disapatchCorrectValues.variableCosts_Exec);
+    const marketing = getNormalNumber(disapatchCorrectValues.variableCosts_Marketing);
+    const onceEarning = getNormalNumber(disapatchCorrectValues.firstFun_OnceRevenue);
+    const totalCosts = getNormalNumber(disapatchCorrectValues.constantCosts_TotalCosts);
+    const firstCv1 = getNormalNumber(disapatchCorrectValues.firstFun_CV1);
+    const firstCv2 = getNormalNumber(disapatchCorrectValues.firstFun_CV2);
+    const firstShows = getNormalNumber(disapatchCorrectValues.sellFunnel_01_Shows);
+    const applications = getNormalNumber(disapatchCorrectValues.sellFunnel_01_Applications);
+    const funnelSell = getNormalNumber(disapatchCorrectValues.sellFunnel_01_Sells);
+    const funnelCv3 = getNormalNumber(disapatchCorrectValues.sellFunnel_02_CV3);
+    const shows = getNormalNumber(disapatchCorrectValues.firstFun_Shows);
+    const firstFunSells = getNormalNumber(disapatchCorrectValues.firstFun_Sells);
+    const sellFunnelCv2 = getNormalNumber(disapatchCorrectValues.sellFunnel_01_CV2);
+    const constantCostsFotOwner = getNormalNumber(disapatchCorrectValues.constantCosts_FotOwner);
+    const constantCostsFot = getNormalNumber(disapatchCorrectValues.constantCosts_Fot);
+    const sellBill = getNormalNumber(disapatchCorrectValues.sellFunnel_03_MedBill);
+    const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellFunnel_02_RegularPayClients);
+    const sellConstantClients = getNormalNumber(disapatchCorrectValues.sellFunnel_02_ConstantClients);
 
     if (dependenceInputFields.applications.includes(functionConst)) {
-      setStateHelper(
-        'firstFun_Applications',
-        (shows * getNormalNumber(firstCv1)) / 100,
-      );
-      copyDisapatch = {
-        ...copyDisapatch,
-        firstFun_Applications: (shows * getNormalNumber(firstCv1)) / 100,
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
+        firstFun_Applications: (shows * firstCv1) / 100,
       };
     }
 
     if (dependenceInputFields.oncePayment.includes(functionConst)) {
-      setStateHelper(
-        'firstFun_Sells',
-        (getNormalNumber(object.firstFun_Applications) * firstCv2) / 100,
-      );
-
-      setStateHelper(
-        'firstFun_OnceRevenue',
-        getNormalNumber(object.firstFun_Sells) * getNormalNumber(object.firstFun_MedBill),
-      );
-      copyDisapatch = {
-        ...copyDisapatch,
-        firstFun_Sells: (getNormalNumber(object.firstFun_Applications) * firstCv2) / 100,
-        firstFun_OnceRevenue: firstFunSells * getNormalNumber(object.firstFun_MedBill),
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
+        firstFun_Sells: (getNormalNumber(disapatchCorrectValues.firstFun_Applications) * firstCv2) / 100,
+        firstFun_OnceRevenue: firstFunSells * getNormalNumber(disapatchCorrectValues.firstFun_MedBill),
       };
     }
 
     if (dependenceInputFields.sellsApplication.includes(functionConst)) {
-      setStateHelper(
-        'sellFunnel_01_Applications',
-        (getNormalNumber(object.sellFunnel_01_CV1) * firstShows) / 100,
-      );
-      copyDisapatch = {
-        ...copyDisapatch,
-        sellFunnel_01_Applications: (getNormalNumber(object.sellFunnel_01_CV1) * firstShows) / 100,
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
+        sellFunnel_01_Applications: (getNormalNumber(disapatchCorrectValues.sellFunnel_01_CV1) * firstShows) / 100,
       };
     }
 
     if (dependenceInputFields.sellsAmount.includes(functionConst)) {
-      setStateHelper(
-        'sellFunnel_01_Sells',
-        (getNormalNumber(object.sellFunnel_01_CV2) * getNormalNumber(applications)) / 100,
-      );
-      copyDisapatch = {
-        ...copyDisapatch,
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
         sellFunnel_01_Sells: (sellFunnelCv2 * getNormalNumber(applications)) / 100,
       };
     }
 
     if (dependenceInputFields.clients.includes(functionConst)) {
-      setStateHelper(
-        'sellFunnel_02_ConstantClients',
-        Math.round((funnelCv3 * funnelSell) / 100),
-      );
-      copyDisapatch = {
-        ...copyDisapatch,
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
         sellFunnel_02_ConstantClients: Math.round((funnelCv3 * funnelSell) / 100),
       };
     }
 
     if (dependenceInputFields.earning.includes(functionConst)) {
       const revenue = sellBill * (sellRegularPayClients + funnelSell + sellConstantClients);
-      setStateHelper('sellFunnel_03_Revenue', getNormalNumber(object.sellFunnel_03_MedBill) * (getNormalNumber(object.sellFunnel_02_RegularPayClients) + getNormalNumber(object.sellFunnel_01_Sells) + getNormalNumber(object.sellFunnel_02_ConstantClients)));
-      copyDisapatch = {
-        ...copyDisapatch,
+
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
         sellFunnel_03_Revenue: revenue,
       };
     }
@@ -183,16 +116,8 @@ const FirstSection = () => {
       const mainCostsFieldClearProfit = earnings - (varCostsTotalCosts + totalCost);
       const firstFunProfit = onceEarning - firstFunVariableCosts;
 
-      setStateHelper('variableCosts_TotalPercent', varCostsTotalPercent);
-      setStateHelper('variableCosts_TotalCosts', varCostsTotalCosts);
-      setStateHelper('mainCostsField_Costs', (varCostsTotalCosts + totalCosts));
-      setStateHelper('mainCostsField_ClearProfit', mainCostsFieldClearProfit);
-      setStateHelper('firstFun_VariableCosts', firstFunVariableCosts);
-      setStateHelper('firstFun_Profit', firstFunProfit);
-      setStateHelper('mainCostsField_MoneyFor', mainCostsFieldClearProfit + firstFunProfit);
-
-      copyDisapatch = {
-        ...copyDisapatch,
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
         variableCosts_TotalPercent: varCostsTotalPercent,
         variableCosts_TotalCosts: varCostsTotalCosts,
         mainCostsField_Costs: (varCostsTotalCosts + totalCosts),
@@ -204,23 +129,21 @@ const FirstSection = () => {
     }
 
     if (dependenceInputFields.totalConst.includes(functionConst)) {
-      const constantCostsCreditPay = getNormalNumber(object.constantCosts_CreditAll) / 10;
-      setStateHelper('constantCosts_CreditPay', constantCostsCreditPay);
-      setStateHelper('constantCosts_TotalCosts', getNormalNumber(object.constantCosts_FotOwner) + getNormalNumber(object.constantCosts_Fot) + constantCostsCreditPay);
-      copyDisapatch = {
-        ...copyDisapatch,
+      const constantCostsCreditPay = getNormalNumber(disapatchCorrectValues.constantCosts_CreditAll) / 10;
+      disapatchCorrectValues = {
+        ...disapatchCorrectValues,
         constantCosts_CreditPay: constantCostsCreditPay,
         constantCosts_TotalCosts: constantCostsFotOwner + constantCostsFot + constantCostsCreditPay,
       };
     }
-    dispatch(setEachPlayerData(copyDisapatch));
+    dispatch(setEachPlayerData(disapatchCorrectValues));
   };
 
   useEffect(() => {
     const winLocal = window.localStorage.getItem('inputValue');
     const localStorageSavedNotes = window.localStorage.getItem('savedNotes');
     if (winLocal) {
-      setInputValue(JSON.parse(winLocal as string));
+      dispatch(setEachPlayerData(winLocal as string));
     }
     if (localStorageSavedNotes) {
       dispatch(dispatchSetSavedNotes(JSON.parse(localStorageSavedNotes as string)));
@@ -249,7 +172,7 @@ const FirstSection = () => {
     }
   };
   const saveNote = () => {
-    const moneyFor = inputValue.mainCostsField_MoneyFor;
+    const moneyFor = eachUserData.mainCostsField_MoneyFor;
     const newSaveNote: any = savedNotes;
     let totalMoney = 0;
 
@@ -267,7 +190,6 @@ const FirstSection = () => {
       totalMoney = getNormalNumber(moneyFor) + getNormalNumber(dialogAmount);
     }
 
-    setStateHelper('mainCostsField_MoneyFor', totalMoney);
     dispatch(setEachPlayerData({
       ...eachUserData,
       mainCostsField_MoneyFor: getNumberWithSpaces(totalMoney),
@@ -292,16 +214,29 @@ const FirstSection = () => {
     },
   };
 
-  const addClientsRegularPay = (isIncrease: boolean) => {
-    if (isIncrease) {
-      return setStateHelper('sellFunnel_02_RegularPayClients', getNormalNumber(inputValue.sellFunnel_02_RegularPayClients) + 1);
-    }
-    if (inputValue.sellFunnel_02_RegularPayClients === '0') {
-      return console.log('');
-    }
-    return setStateHelper('sellFunnel_02_RegularPayClients', getNormalNumber(inputValue.sellFunnel_02_RegularPayClients) - 1);
+  const inputLastSymbolSx = {
+    mx: 0,
+    backgroundColor: 'white',
+    padding: '29.7px 14px',
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
   };
 
+  const addClientsRegularPay = (isIncrease: boolean) => {
+    if (isIncrease) {
+      return dispatch(setEachPlayerData({
+        ...eachUserData,
+        sellFunnel_02_RegularPayClients: getNormalNumber((eachUserData.sellFunnel_02_RegularPayClients) + 1),
+      }));
+    }
+    if (eachUserData.sellFunnel_02_RegularPayClients === 0) {
+      return console.log('');
+    }
+    return dispatch(setEachPlayerData({
+      ...eachUserData,
+      sellFunnel_02_RegularPayClients: getNormalNumber((eachUserData.sellFunnel_02_RegularPayClients) - 1),
+    }));
+  };
   return (
     <Grid container spacing={2}>
       <Grid xs={3} item>
@@ -319,13 +254,7 @@ const FirstSection = () => {
               InputProps={{
                 endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -333,7 +262,7 @@ const FirstSection = () => {
               }}
               sx={styleWithoutArrows}
               disabled={item.disabled}
-              value={inputValue[item.functionConst]}
+              value={eachUserData[item.functionConst]}
               label={item.label}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
@@ -349,13 +278,7 @@ const FirstSection = () => {
             InputProps={{
               endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -364,7 +287,7 @@ const FirstSection = () => {
             sx={styleWithoutArrows}
             disabled={item.disabled}
             label={item.label}
-            value={inputValue[item.functionConst]}
+            value={eachUserData[item.functionConst]}
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
@@ -374,13 +297,7 @@ const FirstSection = () => {
             InputProps={{
               endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -390,16 +307,14 @@ const FirstSection = () => {
             key={item.label}
             disabled={item.disabled}
             label={item.label}
-            value={inputValue[item.functionConst]}
+            value={eachUserData[item.functionConst]}
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
         <Stack
           direction="row"
           spacing={2}
-          sx={{
-            display: 'flex',
-          }}
+          display="flex"
         >
 
           <Button
@@ -428,13 +343,7 @@ const FirstSection = () => {
             InputProps={{
               endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -444,7 +353,7 @@ const FirstSection = () => {
             key={item.label}
             label={item.label}
             disabled={item.disabled}
-            value={inputValue[item.functionConst]}
+            value={eachUserData[item.functionConst]}
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
@@ -460,13 +369,7 @@ const FirstSection = () => {
             InputProps={{
               endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -476,7 +379,7 @@ const FirstSection = () => {
             key={item.label}
             disabled={item.disabled}
             label={item.label}
-            value={inputValue[item.functionConst]}
+            value={eachUserData[item.functionConst]}
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
@@ -490,13 +393,7 @@ const FirstSection = () => {
               InputProps={{
                 endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -506,16 +403,14 @@ const FirstSection = () => {
               key={item.label}
               label={item.label}
               disabled={item.disabled}
-              value={inputValue[item.functionConst]}
+              value={eachUserData[item.functionConst]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
           <Stack
+            display="flex"
             direction="row"
             spacing={2}
-            sx={{
-              display: 'flex',
-            }}
           >
 
             <Button
@@ -551,13 +446,7 @@ const FirstSection = () => {
             InputProps={{
               endAdornment:
   <InputAdornment
-    sx={{
-      mx: 0,
-      backgroundColor: 'white',
-      padding: '29.7px 14px',
-      borderTopRightRadius: 4,
-      borderBottomRightRadius: 4,
-    }}
+    sx={inputLastSymbolSx}
     position="end"
   >
     {item.inputProps}
@@ -567,7 +456,7 @@ const FirstSection = () => {
             key={item.label}
             label={item.label}
             disabled={item.disabled}
-            value={inputValue[item.functionConst]}
+            value={eachUserData[item.functionConst]}
             onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
           />
         ))}
