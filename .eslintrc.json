@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb-typescript"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "no-param-reassign": [
+      "error", {
+      "props": true,
+      "ignorePropertyModificationsFor": [
+        "state"
+      ]
+    }],
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": ["off", {
+      "namedComponents": "arrow-function",
+      
+      "unnamedComponents": "arrow-function"
+    }],
+    "no-underscore-dangle": "off",
+    "no-useless-escape":"off"
+  }
+}
