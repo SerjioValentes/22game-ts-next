@@ -20,7 +20,9 @@ const HomePage = () => (
         p: 4,
       }}
       >
-        <FirstSection />
+        <div>
+          <FirstSection />
+        </div>
       </Box>
     </Stack>
   </Box>
