@@ -41,6 +41,7 @@ export interface DataOfUser {
   mainClearProfit: string,
   mainMoneyFor: string,
   mainPersonalCapital: string,
+  constAddField: string,
 }
 interface UserInitialState {
   data: DataOfUser,
@@ -90,6 +91,7 @@ const initialState: UserInitialState = {
     mainClearProfit: '',
     mainMoneyFor: '',
     mainPersonalCapital: '',
+    constAddField: '',
   },
 };
 

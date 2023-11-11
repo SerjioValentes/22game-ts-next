@@ -21,11 +21,10 @@ const Header = () => {
 
   });
   const dispatch = useAppDispatch();
-  const { allRoundsData, savedNotes } = useAppSelector((state) => state.user);
+  const { allRoundsData } = useAppSelector((state) => state.user);
   const eachUserData = useAppSelector((state) => state.user.data);
 
   const handleOnChange = (value: any, gameValue: string) => {
-    // TODO - check this function - maybe can change to dispatch and get values from there
     setGameMainValues((prev: any) => ({
       ...prev,
       [gameValue]: value.target.value,
@@ -38,12 +37,14 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // Here is coming object object
-    // const data = JSON.parse(window.localStorage.getItem('inputValue') as string);
-    // const data = window.localStorage.getItem('inputValue');
-    // if (data) {
-    //   setGameMainValues(data);
-    // }
+    const localEachUserData = window.localStorage.getItem('inputValues');
+    const localGameMainValues = window.localStorage.getItem('gameMainValues');
+    if (localEachUserData) {
+      dispatch(setEachPlayerData(JSON.parse(localEachUserData as string)));
+    }
+    if (localGameMainValues) {
+      setGameMainValues(JSON.parse(localGameMainValues as string));
+    }
   }, []);
 
   const getEachUserData = () => {
@@ -65,7 +66,7 @@ const Header = () => {
       date: new Date().toISOString(),
     };
 
-    window.localStorage.setItem('inputValue', JSON.stringify(dateCountRoundPayClients));
+    window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
     dispatch(setAllRoundsData([...allRoundsData, dateCountRoundPayClients]));
@@ -96,7 +97,7 @@ const Header = () => {
       </Button>
 
       <RightMenuDrawer
-        savedNotes={savedNotes}
+        savedNotes={eachUserData.savedNotes}
       />
       {
         [{
@@ -136,10 +137,10 @@ const Header = () => {
         {' '}
         {eachUserData.round + 1}
       </Typography>
-      <Button onClick={() => {
-        console.log(eachUserData);
-        console.log(savedNotes);
-      }}
+      <Button
+        onClick={() => {
+          console.log(allRoundsData);
+        }}
       >
         show
 

@@ -185,6 +185,12 @@ const inputList = {
       inputProps: '',
     },
     {
+      label: 'Доп поле',
+      functionConst: 'constAddField',
+      disabled: false,
+      inputProps: '',
+    },
+    {
       label: 'Итого',
       functionConst: 'constTotalCosts',
       disabled: true,

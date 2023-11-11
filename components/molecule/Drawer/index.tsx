@@ -9,11 +9,7 @@ import {
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import useAppSelector from '@/hooks/useAppSelector';
-// import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-// import { setSavedNotes as dispatchSetSavedNotes } from '@/store/user/slice';
-// import { useAppDispatch } from '@/store';
 
-// export default function RightMenuDrawer({ savedNotes, setSavedNotes }: any) {
 export default function RightMenuDrawer({ savedNotes }: any) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [whatToShow, setWhatToShow] = useState('articles');
@@ -34,9 +30,9 @@ export default function RightMenuDrawer({ savedNotes }: any) {
   // };
   const changeData = (data: string) => {
     if (data === 'articles') {
-      return setWhatToShow('articles');
+      setWhatToShow('articles');
     }
-    return setWhatToShow('allRounds');
+    setWhatToShow('allRounds');
   };
 
   return (
@@ -88,7 +84,6 @@ export default function RightMenuDrawer({ savedNotes }: any) {
                   {item.amount}
                 </ListItem>
                 <ListItem>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, odio?
                   {item.note}
                 </ListItem>
               </Box>

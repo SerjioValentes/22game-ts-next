@@ -53,6 +53,7 @@ const FirstSection = () => {
     mainClearProfit: '',
     mainMoneyFor: '',
     mainPersonalCapital: '',
+    constAddField: '',
   });
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -83,6 +84,7 @@ const FirstSection = () => {
     const obligations = getNormalNumber(disapatchCorrectValues.varCosts); // Исполнение обязательств
     const marketing = getNormalNumber(disapatchCorrectValues.varMarketing);
     const constantCostsFotOwner = getNormalNumber(disapatchCorrectValues.constFotOwner);
+    const constAddField = getNormalNumber(disapatchCorrectValues.constAddField); // Дополнительное поле - Постоянные расходы
     const constantCostsFot = getNormalNumber(disapatchCorrectValues.constFot);
     const constCreditAll = getNormalNumber(disapatchCorrectValues.constCreditAll);
     const sells = getNormalNumber(disapatchCorrectValues.varSells); // Продажи - Переменные расходы
@@ -103,7 +105,7 @@ const FirstSection = () => {
     const firstFunVariableCosts = (varCostsTotalPercent * onceEarning) / 100; // Переменные расходы - Разовая воронка
     const firstFunProfit = onceEarning - firstFunVariableCosts; // Прибыль - Разовая воронка
     const constantCostsCreditPay = constCreditAll / 10; // Кредит платеж - Постоянные расходы
-    const totalCosts = constantCostsFotOwner + constantCostsFot + constantCostsCreditPay; // Итого - Постоянные расходы
+    const totalCosts = constantCostsFotOwner + constantCostsFot + constantCostsCreditPay + constAddField; // Итого - Постоянные расходы
     const mainCostsFieldClearProfit = revenue - (varCostsTotalCosts + totalCosts); // Чистая прибыль - Основное поле
 
     disapatchCorrectValues = {
@@ -145,18 +147,15 @@ const FirstSection = () => {
       ...disapatchCorrectValues,
     }));
 
-    window.localStorage.setItem('inputValues', JSON.stringify({ ...disapatchCorrectValues }));
+    dispatch(setEachPlayerData({
+      ...disapatchCorrectValues,
+    }));
   };
 
   useEffect(() => {
-    const localInputValues = window.localStorage.getItem('inputValues');
-    // const localStorageSavedNotes = window.localStorage.getItem('savedNotes');
-    if (localInputValues) {
-      setInputValues(JSON.parse(localInputValues as string));
-      // dispatch(setEachPlayerData(winLocal as string));
-    }
-    // if (localStorageSavedNotes) {
-    //   dispatch(dispatchSetSavedNotes(JSON.parse(localStorageSavedNotes as string)));
+    // const localInputValues = window.localStorage.getItem('inputValues');
+    // if (localInputValues) {
+    //   setInputValues(JSON.parse(localInputValues as string));
     // }
   }, []);
 
@@ -198,6 +197,17 @@ const FirstSection = () => {
       savedNotes: [...newSaveNote, newSavedNoteValue],
       mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     }));
+    dispatch(setEachPlayerData({
+      ...eachUserData,
+      savedNotes: [...newSaveNote, newSavedNoteValue],
+      mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    }));
+
+    // window.localStorage.setItem('inputValues', JSON.stringify({
+    //   ...inputValues,
+    //   savedNotes: [...newSaveNote, newSavedNoteValue],
+    //   mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    // }));
 
     handleClose();
   };
@@ -208,6 +218,14 @@ const FirstSection = () => {
         ...prev,
         sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
       }));
+      dispatch(setEachPlayerData({
+        ...eachUserData,
+        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
+      }));
+      // window.localStorage.setItem('inputValues', JSON.stringify({
+      //   ...inputValues,
+      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
+      // }));
     }
 
     if (inputValues.sellRegularPay === '0') {
@@ -219,6 +237,14 @@ const FirstSection = () => {
         ...prev,
         sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
       }));
+      dispatch(setEachPlayerData({
+        ...eachUserData,
+        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
+      }));
+      // window.localStorage.setItem('inputValues', JSON.stringify({
+      //   ...inputValues,
+      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
+      // }));
     }
   };
 
@@ -226,7 +252,6 @@ const FirstSection = () => {
     <div>
       <Button onClick={() => {
         console.log('eachUserData', eachUserData);
-        // console.log('mainMoneyFor', inputValues.mainMoneyFor);
       }}
       >
         showMeMore
@@ -257,7 +282,7 @@ const FirstSection = () => {
                 }}
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
-                value={inputValues[item.functionConst as keyof DataOfUser]}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
                 label={item.label}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
@@ -286,7 +311,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
-              value={inputValues[item.functionConst as keyof DataOfUser]}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
@@ -306,7 +331,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
-              value={inputValues[item.functionConst as keyof DataOfUser]}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
@@ -353,7 +378,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               label={item.label}
               disabled={item.disabled}
-              value={inputValues[item.functionConst as keyof DataOfUser]}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
@@ -381,7 +406,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
-              value={inputValues[item.functionConst as keyof DataOfUser]}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
@@ -405,7 +430,7 @@ const FirstSection = () => {
                 key={item.label}
                 label={item.label}
                 disabled={item.disabled}
-                value={inputValues[item.functionConst as keyof DataOfUser]}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
@@ -461,7 +486,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               label={item.label}
               disabled={item.disabled}
-              value={inputValues[item.functionConst as keyof DataOfUser]}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
