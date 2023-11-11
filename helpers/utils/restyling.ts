@@ -1,4 +1,7 @@
-export const getNumberWithSpaces = (number: string | number) => number.toString().replaceAll(' ', '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+export const getNumberWithSpaces = () => {
+  // console.log(number);
+  // return number.toString().replaceAll(' ', '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
 
 export const getNormalNumber = (value: string | number) => {
   if (value) {

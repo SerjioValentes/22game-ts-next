@@ -31,10 +31,6 @@ const Header = () => {
       [gameValue]: value.target.value,
     }));
 
-    // dispatch(setHeaderMainPlayerData({
-    //   ...gameMainValues,
-    //   [gameValue]: value.target.value,
-    // }));
     window.localStorage.setItem('gameMainValues', JSON.stringify({
       ...gameMainValues,
       [gameValue]: value.target.value,
@@ -42,7 +38,9 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const data = JSON.parse(window.localStorage.getItem('gameMainValues') as string);
+    // Here is coming object object
+    // const data = JSON.parse(window.localStorage.getItem('inputValue') as string);
+    const data = window.localStorage.getItem('inputValue');
     if (data) {
       setGameMainValues(data);
     }
@@ -57,24 +55,17 @@ const Header = () => {
   };
 
   const endRound = () => {
-    const constantClients = getNormalNumber(eachUserData.sellFunnel_02_ConstantClients);
-    const regularPayClients = getNormalNumber(eachUserData.sellFunnel_02_RegularPayClients);
-    // if (eachUserData.round === 1) {
-    //   const dateCountRoundPayClientsCopy = {
-    //     ...eachUserData,
-    //     date: new Date().toISOString(),
-    //   };
-    //   dispatch(setAllRoundsData([dateCountRoundPayClientsCopy]));
-    // }
+    const constantClients = getNormalNumber(eachUserData.sellConstClients);
+    const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
 
     const dateCountRoundPayClients = {
       ...eachUserData,
-      sellFunnel_02_RegularPayClients: regularPayClients + constantClients,
+      sellRegularPay: regularPayClients + constantClients,
       round: eachUserData.round + 1,
       date: new Date().toISOString(),
     };
 
-    window.localStorage.setItem('inputValue', JSON.stringify(eachUserData));
+    window.localStorage.setItem('inputValue', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
     dispatch(setAllRoundsData([...allRoundsData, dateCountRoundPayClients]));
@@ -107,47 +98,36 @@ const Header = () => {
       <RightMenuDrawer
         savedNotes={savedNotes}
       />
-
-      <TextField
-        InputLabelProps={{
-          style: {
-            fontSize: 12,
-          },
-        }}
-        label="Имя"
-        value={gameMainValues.name}
-        onChange={(e: any) => handleOnChange(e, 'name')}
-      />
-      <TextField
-        InputLabelProps={{
-          style: {
-            fontSize: 12,
-          },
-        }}
-        label="Бизнес"
-        value={gameMainValues.bussiness}
-        onChange={(e: any) => handleOnChange(e, 'bussiness')}
-      />
-      <TextField
-        InputLabelProps={{
-          style: {
-            fontSize: 12,
-          },
-        }}
-        label="Цель на игру"
-        value={gameMainValues.gamePlan}
-        onChange={(e: any) => handleOnChange(e, 'gamePlan')}
-      />
-      <TextField
-        InputLabelProps={{
-          style: {
-            fontSize: 12,
-          },
-        }}
-        label="Запрос на игру"
-        value={gameMainValues.gameRequest}
-        onChange={(e: any) => handleOnChange(e, 'gameRequest')}
-      />
+      {
+        [{
+          name: 'name',
+          label: 'Имя',
+        },
+        {
+          name: 'bussiness',
+          label: 'Бизнес',
+        },
+        {
+          name: 'gamePlan',
+          label: 'Цель на игру',
+        },
+        {
+          name: 'gameRequest',
+          label: 'Запрос на игру',
+        }].map((item: any) => (
+          <TextField
+            key={item.label}
+            InputLabelProps={{
+              style: {
+                fontSize: 12,
+              },
+            }}
+            label={item.label}
+            value={gameMainValues[item.name as keyof typeof gameMainValues]}
+            onChange={(e: any) => handleOnChange(e, item.name)}
+          />
+        ))
+      }
       <Typography sx={{
         whiteSpace: 'nowrap',
       }}
@@ -156,7 +136,13 @@ const Header = () => {
         {' '}
         {eachUserData.round + 1}
       </Typography>
+      <Button onClick={() => {
+        console.log(eachUserData);
+      }}
+      >
+        show
 
+      </Button>
       <Dialog onClose={handleClose} open={isDialogEndRoundOpen}>
         <Box sx={{
           p: 4,

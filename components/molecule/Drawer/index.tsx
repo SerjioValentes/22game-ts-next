@@ -120,7 +120,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
                     Чистая прибыль
                   </Typography>
                   <Typography>
-                    {itemRound.mainCostsField_ClearProfit}
+                    {itemRound.mainClearProfit}
                   </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
@@ -128,7 +128,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
                     Денег на Расч/Счет
                   </Typography>
                   <Typography>
-                    {itemRound.mainCostsField_MoneyFor}
+                    {itemRound.mainMoneyFor}
                   </Typography>
                 </Stack>
               </List>

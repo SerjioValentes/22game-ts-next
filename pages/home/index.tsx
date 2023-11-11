@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Stack } from '@mui/material';
 import FirstSection from '@/components/organism/HomePage/FirstSection';
 import Header from '@/components/organism/Header';
+// import MainCalc from '@/components/organism/HomePage/newVersion';
 
 const HomePage = () => (
   <Box sx={{
@@ -21,6 +22,7 @@ const HomePage = () => (
       }}
       >
         <div>
+          {/* <MainCalc /> */}
           <FirstSection />
         </div>
       </Box>

@@ -5,6 +5,7 @@ import { TextFieldProps } from '@mui/material/TextField/TextField';
 
 type Props = {
   label: string;
+  // value: any;
 };
 
 const MuiInputTextField: FC<TextFieldProps & Props> = ({
