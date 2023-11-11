@@ -61,7 +61,7 @@ const FirstSection = () => {
   const [dialogNote, setDialogNote] = useState('');
 
   const dispatch = useAppDispatch();
-  // const eachUserData: any = useAppSelector((state) => state.user.data);
+  const eachUserData: any = useAppSelector((state) => state.user.data);
   // const savedNotes = useAppSelector((state) => state.user.savedNotes);
 
   const textFieldOnChange = (value: string, functionConst: string) => {
@@ -144,18 +144,20 @@ const FirstSection = () => {
     setInputValues(() => ({
       ...disapatchCorrectValues,
     }));
-    dispatch(setEachPlayerData(disapatchCorrectValues));
+
+    window.localStorage.setItem('inputValues', JSON.stringify({ ...disapatchCorrectValues }));
   };
 
   useEffect(() => {
-    const winLocal = window.localStorage.getItem('inputValue');
-    const localStorageSavedNotes = window.localStorage.getItem('savedNotes');
-    if (winLocal) {
-      dispatch(setEachPlayerData(winLocal as string));
+    const localInputValues = window.localStorage.getItem('inputValues');
+    // const localStorageSavedNotes = window.localStorage.getItem('savedNotes');
+    if (localInputValues) {
+      setInputValues(JSON.parse(localInputValues as string));
+      // dispatch(setEachPlayerData(winLocal as string));
     }
-    if (localStorageSavedNotes) {
-      dispatch(dispatchSetSavedNotes(JSON.parse(localStorageSavedNotes as string)));
-    }
+    // if (localStorageSavedNotes) {
+    //   dispatch(dispatchSetSavedNotes(JSON.parse(localStorageSavedNotes as string)));
+    // }
   }, []);
 
   const handleClose = () => {
@@ -197,7 +199,6 @@ const FirstSection = () => {
       mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     }));
 
-    window.localStorage.setItem('savedNotes', JSON.stringify([...newSaveNote, newSavedNoteValue]));
     handleClose();
   };
 
@@ -223,14 +224,14 @@ const FirstSection = () => {
 
   return (
     <div>
-      {/* <Button onClick={() => {
-        console.log('savedNotes', inputValues.savedNotes);
-        console.log('mainMoneyFor', inputValues.mainMoneyFor);
+      <Button onClick={() => {
+        console.log('eachUserData', eachUserData);
+        // console.log('mainMoneyFor', inputValues.mainMoneyFor);
       }}
       >
         showMeMore
 
-      </Button> */}
+      </Button>
       <Grid container spacing={2}>
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Grid xs={3} item>

@@ -6,6 +6,7 @@ export interface DataOfUser {
   round: number,
   firstShows: string,
   firstCv1: string,
+  savedNotes: [],
   firstApplications: string,
   firstCv2: string,
   firstBill: string,
@@ -52,6 +53,7 @@ const initialState: UserInitialState = {
   allRoundsData: [],
   data: {
     round: 0,
+    savedNotes: [],
     firstShows: '',
     firstCv1: '',
     firstApplications: '',
@@ -92,7 +94,7 @@ const initialState: UserInitialState = {
 };
 
 export const userSlice = createSlice({
-  name: 'data',
+  name: 'UserData',
   initialState,
   reducers: {
     setEachPlayerData(state, action) {

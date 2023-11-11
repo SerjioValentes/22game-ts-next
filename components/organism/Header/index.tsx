@@ -40,10 +40,10 @@ const Header = () => {
   useEffect(() => {
     // Here is coming object object
     // const data = JSON.parse(window.localStorage.getItem('inputValue') as string);
-    const data = window.localStorage.getItem('inputValue');
-    if (data) {
-      setGameMainValues(data);
-    }
+    // const data = window.localStorage.getItem('inputValue');
+    // if (data) {
+    //   setGameMainValues(data);
+    // }
   }, []);
 
   const getEachUserData = () => {
@@ -138,6 +138,7 @@ const Header = () => {
       </Typography>
       <Button onClick={() => {
         console.log(eachUserData);
+        console.log(savedNotes);
       }}
       >
         show
