@@ -5,13 +5,9 @@ export const styleWithoutArrows = {
   '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
     display: 'none',
   },
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: 'white',
-  },
   input: {
     backgroundColor: 'white',
-    borderTopLeftRadius: 4,
-    borderBottomLeftRadius: 4,
+    borderRadius: 2,
   },
 };
 

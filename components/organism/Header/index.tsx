@@ -137,14 +137,14 @@ const Header = () => {
         {' '}
         {eachUserData.round + 1}
       </Typography>
-      <Button
+      {/* <Button
         onClick={() => {
           console.log(allRoundsData);
         }}
       >
         show
 
-      </Button>
+      </Button> */}
       <Dialog onClose={handleClose} open={isDialogEndRoundOpen}>
         <Box sx={{
           p: 4,

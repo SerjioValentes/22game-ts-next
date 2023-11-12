@@ -250,36 +250,29 @@ const FirstSection = () => {
 
   return (
     <div>
-      <Button onClick={() => {
+      {/* <Button onClick={() => {
         console.log('eachUserData', eachUserData);
       }}
       >
         showMeMore
 
-      </Button>
-      <Grid container spacing={2}>
+      </Button> */}
+      <Grid container spacing={1}>
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
-        <Grid xs={3} item>
+        <Grid
+          xs={3}
+          item
+        >
           <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
           <Box sx={{
             border: '1px solid white',
             borderRadius: 2,
             p: 2,
-            mt: 1,
           }}
           >
             {inputList.firstFunnel.map((item) => (
               <MuiInputTextField
                 key={item.label}
-                InputProps={{
-                  endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-                }}
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 value={eachUserData[item.functionConst as keyof DataOfUser]}
@@ -293,96 +286,79 @@ const FirstSection = () => {
         {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
 
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
-        <Grid xs={3} item>
+        <Grid
+          xs
+          item
+        >
           <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
-          {inputList.sellFunnel_01.map((item) => (
-
-            <MuiInputTextField
-              key={item.label}
-              InputProps={{
-                endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-              }}
-              sx={styleWithoutArrows}
-              disabled={item.disabled}
-              label={item.label}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
-              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-            />
-          ))}
-
-          {inputList.sellFunnel_02.map((item) => (
-            <MuiInputTextField
-              key={item.label}
-              InputProps={{
-                endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-              }}
-              sx={styleWithoutArrows}
-              disabled={item.disabled}
-              label={item.label}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
-              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-            />
-          ))}
-          {/* Start ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- Start */}
-          <Stack
-            direction="row"
-            spacing={2}
-            display="flex"
+          <Box sx={{
+            px: 2,
+          }}
           >
 
-            <Button
-              sx={{
-                fontSize: 10,
-              }}
-              size="small"
-              onClick={() => addClientsRegularPay(true)}
-              variant="contained"
+            {inputList.sellFunnel_01.map((item) => (
+
+              <MuiInputTextField
+                key={item.label}
+                sx={styleWithoutArrows}
+                disabled={item.disabled}
+                label={item.label}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+              />
+            ))}
+
+            {inputList.sellFunnel_02.map((item) => (
+              <MuiInputTextField
+                key={item.label}
+                sx={styleWithoutArrows}
+                disabled={item.disabled}
+                label={item.label}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+              />
+            ))}
+            {/* Start ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- Start */}
+            <Stack
+              direction="row"
+              spacing={2}
+              display="flex"
             >
-              Добавить
-            </Button>
-            <Button
-              sx={{
-                fontSize: 10,
-              }}
-              onClick={() => addClientsRegularPay(false)}
-              variant="contained"
-            >
-              Убавить
-            </Button>
-          </Stack>
-          {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- End */}
-          {inputList.sellFunnel_03.map((item) => (
-            <MuiInputTextField
-              key={item.label}
-              InputProps={{
-                endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-              }}
-              sx={styleWithoutArrows}
-              label={item.label}
-              disabled={item.disabled}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
-              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-            />
-          ))}
+
+              <Button
+                sx={{
+                  fontSize: 10,
+                }}
+                size="small"
+                onClick={() => addClientsRegularPay(true)}
+                variant="contained"
+              >
+                Добавить
+              </Button>
+              <Button
+                sx={{
+                  fontSize: 10,
+                }}
+                onClick={() => addClientsRegularPay(false)}
+                variant="contained"
+              >
+                Убавить
+              </Button>
+            </Stack>
+            {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- End */}
+            {inputList.sellFunnel_03.map((item) => (
+              <MuiInputTextField
+                key={item.label}
+                sx={styleWithoutArrows}
+                label={item.label}
+                disabled={item.disabled}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+              />
+            ))}
+          </Box>
         </Grid>
+
         {/* End ---------------- ВОРОНКА ПРОДАЖ --------------- End */}
 
         {/* Start ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- Start */}
@@ -394,15 +370,6 @@ const FirstSection = () => {
           {inputList.variableCosts.map((item) => (
             <MuiInputTextField
               key={item.label}
-              InputProps={{
-                endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-              }}
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
@@ -411,78 +378,60 @@ const FirstSection = () => {
             />
           ))}
           <hr />
-          <Grid
+          {/* <Grid
             xs={12}
             item
+          > */}
+          {inputList.mainCostsField.map((item) => (
+            <MuiInputTextField
+              sx={styleWithoutArrows}
+              key={item.label}
+              label={item.label}
+              disabled={item.disabled}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
+              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+            />
+          ))}
+          {/* Start ---------------- ДОБАВИТЬ/УБАВИТЬ - переменные расходы --------------- Start */}
+          <Stack
+            display="flex"
+            direction="row"
+            spacing={2}
           >
-            {inputList.mainCostsField.map((item) => (
-              <MuiInputTextField
-                InputProps={{
-                  endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-                }}
-                sx={styleWithoutArrows}
-                key={item.label}
-                label={item.label}
-                disabled={item.disabled}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
-                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-              />
-            ))}
-            {/* Start ---------------- ДОБАВИТЬ/УБАВИТЬ - переменные расходы --------------- Start */}
-            <Stack
-              display="flex"
-              direction="row"
-              spacing={2}
+
+            <Button
+              sx={{
+                fontSize: 10,
+              }}
+              size="small"
+              onClick={() => addValueTomainCostsFieldMoneyFor('increase')}
+              variant="contained"
             >
+              Добавить
 
-              <Button
-                sx={{
-                  fontSize: 10,
-                }}
-                size="small"
-                onClick={() => addValueTomainCostsFieldMoneyFor('increase')}
-                variant="contained"
-              >
-                Добавить
-
-              </Button>
-              <Button
-                sx={{
-                  fontSize: 10,
-                }}
-                onClick={() => addValueTomainCostsFieldMoneyFor('decrease')}
-                variant="contained"
-              >
-                Убавить
-              </Button>
-            </Stack>
-            {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
-          </Grid>
+            </Button>
+            <Button
+              sx={{
+                fontSize: 10,
+              }}
+              onClick={() => addValueTomainCostsFieldMoneyFor('decrease')}
+              variant="contained"
+            >
+              Убавить
+            </Button>
+          </Stack>
+          {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
+          {/* </Grid> */}
           {/* End ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- End */}
         </Grid>
         <Grid
-          xs={3}
+          xs={2}
           item
         >
           <InputTitleWrapper>Постоянные расходы</InputTitleWrapper>
           {inputList.constantCosts.map((item) => (
             <MuiInputTextField
               key={item.label}
-              InputProps={{
-                endAdornment:
-  <InputAdornment
-    sx={inputLastSymbolSx}
-    position="end"
-  >
-    {item.inputProps}
-  </InputAdornment>,
-              }}
               sx={styleWithoutArrows}
               label={item.label}
               disabled={item.disabled}
