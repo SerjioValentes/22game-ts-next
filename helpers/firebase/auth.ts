@@ -49,12 +49,14 @@ export const createUserWithEmailAndPassword = (setErrors: any, { email, password
     });
 };
 
-export const signInWithEmailAndPassword = (setErrors: any, { email, password }: AuthProps) => {
+export const signInWithEmailAndPassword = (setErrors: any, { email, password }: AuthProps, setUserEmail?: any) => {
   signInWithEmailAndPasswordFirebase(auth, email, password)
     .then((userCredential: any) => {
-      // console.log(userCredential.user);
+      console.log(userCredential.user);
       window.localStorage.setItem('accessToken', JSON.stringify(userCredential.user.accessToken));
-      // setUserEmail(userCredential.user.email);
+      if (setUserEmail) {
+        setUserEmail(userCredential.user.email);
+      }
       window.localStorage.setItem('userEmail', JSON.stringify(userCredential.user.email));
     })
     .catch((error) => {

@@ -127,29 +127,29 @@ const Header = () => {
     handleCloseUserMenu();
   };
 
-  const setDataToFire = async () => {
-    const constantClients = getNormalNumber(eachUserData.sellConstClients);
-    const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
+  // const setDataToFire = async () => {
+  //   const constantClients = getNormalNumber(eachUserData.sellConstClients);
+  //   const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
 
-    const dateCountRoundPayClients = {
-      ...eachUserData,
-      sellRegularPay: regularPayClients + constantClients,
-      round: eachUserData.round + 1,
-      date: new Date().toISOString(),
-    };
+  //   const dateCountRoundPayClients = {
+  //     ...eachUserData,
+  //     sellRegularPay: regularPayClients + constantClients,
+  //     round: eachUserData.round + 1,
+  //     date: new Date().toISOString(),
+  //   };
 
-    const newDateCountRoundPayClients = {
-      ...dateCountRoundPayClients,
-      allRoundsData: [...allRoundsData, dateCountRoundPayClients],
-    };
+  //   const newDateCountRoundPayClients = {
+  //     ...dateCountRoundPayClients,
+  //     allRoundsData: [...allRoundsData, dateCountRoundPayClients],
+  //   };
 
-    try {
-      const docRef = await setDoc(doc(firebaseDb, 'users', userEmail as string), newDateCountRoundPayClients);
-      console.log('Document written with ID: ', docRef);
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
-  };
+  //   try {
+  //     const docRef = await setDoc(doc(firebaseDb, 'users', userEmail as string), newDateCountRoundPayClients);
+  //     console.log('Document written with ID: ', docRef);
+  //   } catch (e) {
+  //     console.error('Error adding document: ', e);
+  //   }
+  // };
 
   const handleLogOut = () => {
     localStorage.clear();
