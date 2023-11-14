@@ -206,7 +206,7 @@ const inputList = {
     },
     {
       label: 'Коэфф ЧП',
-      functionConst: 'PercentClearProfit',
+      functionConst: 'percentClearProfit',
       disabled: false,
       inputProps: '',
     },

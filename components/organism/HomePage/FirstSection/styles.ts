@@ -6,6 +6,7 @@ export const styleWithoutArrows = {
     display: 'none',
   },
   input: {
+    height: '17px',
     backgroundColor: 'white',
     borderRadius: 2,
   },

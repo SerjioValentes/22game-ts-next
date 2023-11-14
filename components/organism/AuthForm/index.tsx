@@ -6,7 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@/he
 import CustomizedSwitches from '@/components/atom/Switch';
 import FormWrapper from './style';
 
-interface IUserData {
+export interface IUserData {
   email: string;
   password: string;
 }

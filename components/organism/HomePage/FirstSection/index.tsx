@@ -1,17 +1,17 @@
 'use client';
 
 import {
-  Box, Button, Dialog, DialogTitle, Grid, InputAdornment, Stack, TextField, Typography,
+  Box, Button, Dialog, DialogTitle, Grid, Stack, TextField,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './style.scss';
 import MuiInputTextField from '@/components/atom/Input';
 import inputList from '@/helpers/utils/inputs';
 import { useAppDispatch } from '@/store';
-import { setEachPlayerData, setSavedNotes as dispatchSetSavedNotes, DataOfUser } from '@/store/user/slice';
+import { setEachPlayerData, DataOfUser } from '@/store/user/slice';
 import useAppSelector from '@/hooks/useAppSelector';
 import { getNormalNumber } from '@/helpers/utils/restyling';
-import { InputTitleWrapper, inputLastSymbolSx, styleWithoutArrows } from './styles';
+import { InputTitleWrapper, styleWithoutArrows } from './styles';
 
 const FirstSection = () => {
   const [inputValues, setInputValues] = useState({
@@ -49,7 +49,7 @@ const FirstSection = () => {
     constCreditPay: '',
     constTotalCosts: '',
     mainCosts: '',
-    PercentClearProfit: '',
+    percentClearProfit: '1',
     mainClearProfit: '',
     mainMoneyFor: '',
     mainPersonalCapital: '',
@@ -63,7 +63,6 @@ const FirstSection = () => {
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
-  // const savedNotes = useAppSelector((state) => state.user.savedNotes);
 
   const textFieldOnChange = (value: string, functionConst: string) => {
     let disapatchCorrectValues = {
@@ -81,6 +80,7 @@ const FirstSection = () => {
     const funnelCv3 = getNormalNumber(disapatchCorrectValues.sellCV3); // CV3 - Воронка продаж
     const sellShows = getNormalNumber(disapatchCorrectValues.sellShows); // Показы - Воронка продаж
     const sellBill = getNormalNumber(disapatchCorrectValues.sellBill);
+    const percClearProf = getNormalNumber(disapatchCorrectValues.percentClearProfit); // Коэффициент ЧП - Переменные расходы
     const obligations = getNormalNumber(disapatchCorrectValues.varCosts); // Исполнение обязательств
     const marketing = getNormalNumber(disapatchCorrectValues.varMarketing);
     const constantCostsFotOwner = getNormalNumber(disapatchCorrectValues.constFotOwner);
@@ -120,7 +120,7 @@ const FirstSection = () => {
       varTotalPercent: (Math.round(varCostsTotalPercent)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       varTotalCosts: (Math.round(varCostsTotalCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       mainCosts: (Math.round(varCostsTotalCosts + totalCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      mainClearProfit: (Math.round(mainCostsFieldClearProfit)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      mainClearProfit: (Math.round(mainCostsFieldClearProfit * percClearProf)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       firstSpends: (Math.round(firstFunVariableCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       firstProfit: (Math.round(firstFunProfit)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       mainMoneyFor: (Math.round(mainCostsFieldClearProfit + firstFunProfit)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
@@ -151,13 +151,6 @@ const FirstSection = () => {
       ...disapatchCorrectValues,
     }));
   };
-
-  useEffect(() => {
-    // const localInputValues = window.localStorage.getItem('inputValues');
-    // if (localInputValues) {
-    //   setInputValues(JSON.parse(localInputValues as string));
-    // }
-  }, []);
 
   const handleClose = () => {
     setOpenDialog(false);
@@ -203,12 +196,6 @@ const FirstSection = () => {
       mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     }));
 
-    // window.localStorage.setItem('inputValues', JSON.stringify({
-    //   ...inputValues,
-    //   savedNotes: [...newSaveNote, newSavedNoteValue],
-    //   mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    // }));
-
     handleClose();
   };
 
@@ -222,10 +209,6 @@ const FirstSection = () => {
         ...eachUserData,
         sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
       }));
-      // window.localStorage.setItem('inputValues', JSON.stringify({
-      //   ...inputValues,
-      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
-      // }));
     }
 
     if (inputValues.sellRegularPay === '0') {
@@ -241,22 +224,11 @@ const FirstSection = () => {
         ...eachUserData,
         sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
       }));
-      // window.localStorage.setItem('inputValues', JSON.stringify({
-      //   ...inputValues,
-      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
-      // }));
     }
   };
 
   return (
     <div>
-      {/* <Button onClick={() => {
-        console.log('eachUserData', eachUserData);
-      }}
-      >
-        showMeMore
-
-      </Button> */}
       <Grid container spacing={1}>
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Grid
@@ -272,7 +244,7 @@ const FirstSection = () => {
           >
             {inputList.firstFunnel.map((item) => (
               <MuiInputTextField
-                key={item.label}
+                key={item.functionConst}
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 value={eachUserData[item.functionConst as keyof DataOfUser]}
@@ -292,14 +264,14 @@ const FirstSection = () => {
         >
           <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
           <Box sx={{
-            px: 2,
+            px: 4,
           }}
           >
 
             {inputList.sellFunnel_01.map((item) => (
 
               <MuiInputTextField
-                key={item.label}
+                key={item.functionConst}
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 label={item.label}
@@ -310,7 +282,7 @@ const FirstSection = () => {
 
             {inputList.sellFunnel_02.map((item) => (
               <MuiInputTextField
-                key={item.label}
+                key={item.functionConst}
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 label={item.label}
@@ -328,6 +300,7 @@ const FirstSection = () => {
               <Button
                 sx={{
                   fontSize: 10,
+                  fontWeight: 600,
                 }}
                 size="small"
                 onClick={() => addClientsRegularPay(true)}
@@ -338,6 +311,7 @@ const FirstSection = () => {
               <Button
                 sx={{
                   fontSize: 10,
+                  fontWeight: 600,
                 }}
                 onClick={() => addClientsRegularPay(false)}
                 variant="contained"
@@ -348,7 +322,7 @@ const FirstSection = () => {
             {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - воронка продаж --------------- End */}
             {inputList.sellFunnel_03.map((item) => (
               <MuiInputTextField
-                key={item.label}
+                key={item.functionConst}
                 sx={styleWithoutArrows}
                 label={item.label}
                 disabled={item.disabled}
@@ -363,13 +337,13 @@ const FirstSection = () => {
 
         {/* Start ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- Start */}
         <Grid
-          xs={3}
+          xs={2}
           item
         >
           <InputTitleWrapper>Переменные расходы</InputTitleWrapper>
           {inputList.variableCosts.map((item) => (
             <MuiInputTextField
-              key={item.label}
+              key={item.functionConst}
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
@@ -378,14 +352,10 @@ const FirstSection = () => {
             />
           ))}
           <hr />
-          {/* <Grid
-            xs={12}
-            item
-          > */}
           {inputList.mainCostsField.map((item) => (
             <MuiInputTextField
+              key={item.functionConst}
               sx={styleWithoutArrows}
-              key={item.label}
               label={item.label}
               disabled={item.disabled}
               value={eachUserData[item.functionConst as keyof DataOfUser]}
@@ -402,6 +372,7 @@ const FirstSection = () => {
             <Button
               sx={{
                 fontSize: 10,
+                fontWeight: 600,
               }}
               size="small"
               onClick={() => addValueTomainCostsFieldMoneyFor('increase')}
@@ -413,6 +384,7 @@ const FirstSection = () => {
             <Button
               sx={{
                 fontSize: 10,
+                fontWeight: 600,
               }}
               onClick={() => addValueTomainCostsFieldMoneyFor('decrease')}
               variant="contained"
@@ -421,7 +393,6 @@ const FirstSection = () => {
             </Button>
           </Stack>
           {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
-          {/* </Grid> */}
           {/* End ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- End */}
         </Grid>
         <Grid
@@ -431,7 +402,7 @@ const FirstSection = () => {
           <InputTitleWrapper>Постоянные расходы</InputTitleWrapper>
           {inputList.constantCosts.map((item) => (
             <MuiInputTextField
-              key={item.label}
+              key={item.functionConst}
               sx={styleWithoutArrows}
               label={item.label}
               disabled={item.disabled}
