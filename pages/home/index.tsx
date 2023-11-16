@@ -10,7 +10,7 @@ const HomePage = () => (
   <Box sx={{
     backgroundImage: 'url(/assets/bg/background.jpg)',
     width: '100%',
-    // height: '100vh',
+    height: '100vh',
   }}
   >
     <Stack>
