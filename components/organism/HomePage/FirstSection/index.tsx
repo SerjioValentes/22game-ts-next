@@ -244,7 +244,7 @@ const FirstSection = () => {
 
   return (
     <div>
-      <Button onClick={() => console.log(eachUserData)}>show</Button>
+      {/* <Button onClick={() => console.log(eachUserData)}>show</Button> */}
       <Grid container spacing={1}>
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Grid
