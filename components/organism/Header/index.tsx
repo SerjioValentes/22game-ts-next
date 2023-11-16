@@ -162,8 +162,8 @@ const Header = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      p: 4,
-      gap: 4,
+      p: 2,
+      gap: 1,
       backgroundColor: 'secondary.main',
     }}
     >
@@ -175,8 +175,7 @@ const Header = () => {
         variant="contained"
         onClick={getEachUserData}
       >
-        Завершить
-
+        {eachUserData.round === 0 ? 'Начать игру' : 'Завершить'}
       </Button>
 
       <RightMenuDrawer

@@ -91,60 +91,67 @@ const FirstSection = () => {
     const constCreditAll = getNormalNumber(disapatchCorrectValues.constCreditAll);
     const sells = getNormalNumber(disapatchCorrectValues.varSells); // Продажи - Переменные расходы
     const taxes = getNormalNumber(disapatchCorrectValues.varTaxes); // Налоги - Переменные расходы
-
     const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellRegularPay); // Клиенты (платят регулярно) - Воронка продаж
+    let mainMoneyFor = getNormalNumber(disapatchCorrectValues.mainMoneyFor); // Денег на расч / счете - Основное поле
 
     // Calculations <<< ----------------------------------------------------
-    const firstApplications = (shows * firstCv1) / 100; // Заявки - Разовая воронка
-    const firstSells = (firstCv2 * firstApplications) / 100; // Продажи - Разовая воронка
-    const applications = (sellCV1 * sellShows) / 100; // Заявки - Воронка продаж
-    const funnelSell = (applications * sellFunnelCv2) / 100; // Продажи - Воронка продаж
-    const onceEarning = firstSells * firstBill; // Выручка - Разовая воронка
-    const sellConstantClients = (funnelCv3 * funnelSell) / 100; // Постоянные клиенты - Воронка продаж
-    const revenue = sellBill * (sellRegularPayClients + funnelSell + sellConstantClients); // Выручка - Воронка продаж
-    const varCostsTotalPercent = sells + obligations + marketing + taxes; // Итого от выручки - Переменные расходы
-    const varCostsTotalCosts = (varCostsTotalPercent * revenue) / 100; // Итого - Переменные расходы
-    const firstFunVariableCosts = (varCostsTotalPercent * onceEarning) / 100; // Переменные расходы - Разовая воронка
-    const firstFunProfit = onceEarning - firstFunVariableCosts; // Прибыль - Разовая воронка
-    const constantCostsCreditPay = constCreditAll / 10; // Кредит платеж - Постоянные расходы
-    const totalCosts = constantCostsFotOwner + constantCostsFot + constantCostsCreditPay + constAddField; // Итого - Постоянные расходы
-    const mainCostsFieldClearProfit = revenue - (varCostsTotalCosts + totalCosts); // Чистая прибыль - Основное поле
+    const firstApplications = Math.round((shows * firstCv1) / 100); // Заявки - Разовая воронка
+    const firstSells = Math.round((firstCv2 * firstApplications) / 100); // Продажи - Разовая воронка
+    const applications = Math.round((sellCV1 * sellShows) / 100); // Заявки - Воронка продаж
+    const funnelSell = Math.round((applications * sellFunnelCv2) / 100); // Продажи - Воронка продаж
+    const onceEarning = Math.round(firstSells * firstBill); // Выручка - Разовая воронка
+
+    const sellConstantClients = Math.round((funnelCv3 * funnelSell) / 100); // Постоянные клиенты - Воронка продаж
+    const revenue = Math.round(sellBill * (sellRegularPayClients + funnelSell + sellConstantClients)); // Выручка - Воронка продаж
+    const varCostsTotalPercent = Math.round(sells + obligations + marketing + taxes); // Итого от выручки - Переменные расходы
+    const varCostsTotalCosts = Math.round((varCostsTotalPercent * revenue) / 100); // Итого - Переменные расходы
+    const firstFunVariableCosts = Math.round((varCostsTotalPercent * onceEarning) / 100); // Переменные расходы - Разовая воронка
+    const firstFunProfit = Math.round(onceEarning - firstFunVariableCosts); // Прибыль - Разовая воронка
+    const constantCostsCreditPay = Math.round(constCreditAll / 10); // Кредит платеж - Постоянные расходы
+    const totalCosts = Math.round(constantCostsFotOwner + constantCostsFot + constantCostsCreditPay + constAddField); // Итого - Постоянные расходы
+    const mainCostsFieldClearProfit = Math.round(revenue - (varCostsTotalCosts + totalCosts)); // Чистая прибыль - Основное поле
+
+    if (disapatchCorrectValues.round !== 0) {
+      mainMoneyFor = Math.round(mainCostsFieldClearProfit + firstFunProfit); // Денег на расч / счете - Основное поле
+    }
 
     disapatchCorrectValues = {
       ...disapatchCorrectValues,
-      firstApplications: (Math.round(firstApplications)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      firstSells: Math.round(firstSells).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      firstRevenue: (Math.round(onceEarning)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      sellApplications: (Math.round(applications)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      sellSells: (Math.round(funnelSell)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      sellConstClients: (Math.round(sellConstantClients)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      sellRevenue: (Math.round(revenue)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      varTotalPercent: (Math.round(varCostsTotalPercent)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      varTotalCosts: (Math.round(varCostsTotalCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      firstApplications: firstApplications.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      firstSells: firstSells.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      firstRevenue: onceEarning.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      sellApplications: applications.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      sellSells: funnelSell.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      sellConstClients: sellConstantClients.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      sellRevenue: revenue.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      varTotalPercent: varCostsTotalPercent.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      varTotalCosts: varCostsTotalCosts.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       mainCosts: (Math.round(varCostsTotalCosts + totalCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       mainClearProfit: (Math.round(mainCostsFieldClearProfit * percClearProf)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      firstSpends: (Math.round(firstFunVariableCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      firstProfit: (Math.round(firstFunProfit)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      mainMoneyFor: (Math.round(mainCostsFieldClearProfit + firstFunProfit)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      constCreditPay: (Math.round(constantCostsCreditPay)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      constTotalCosts: (Math.round(totalCosts)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      firstSpends: firstFunVariableCosts.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      firstProfit: firstFunProfit.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      mainMoneyFor: mainMoneyFor.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      constCreditPay: constantCostsCreditPay.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      constTotalCosts: totalCosts.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     };
 
-    inputValues.savedNotes.map((item: any) => {
-      if (item.whatHappened === 'Убавить') {
-        disapatchCorrectValues = {
-          ...disapatchCorrectValues,
-          mainMoneyFor: String(getNormalNumber(disapatchCorrectValues.mainMoneyFor) - getNormalNumber(item.amount)),
-        };
-      }
-      if (item.whatHappened === 'Добавить') {
-        disapatchCorrectValues = {
-          ...disapatchCorrectValues,
-          mainMoneyFor: String(getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)),
-        };
-      }
-      return neverFunc();
-    });
+    if (disapatchCorrectValues.round !== 0) {
+      inputValues.savedNotes.map((item: any) => {
+        if (item.whatHappened === 'Убавить') {
+          disapatchCorrectValues = {
+            ...disapatchCorrectValues,
+            mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+          };
+        }
+        if (item.whatHappened === 'Добавить') {
+          disapatchCorrectValues = {
+            ...disapatchCorrectValues,
+            mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+          };
+        }
+        return neverFunc();
+      });
+    }
 
     setInputValues(() => ({
       ...disapatchCorrectValues,
