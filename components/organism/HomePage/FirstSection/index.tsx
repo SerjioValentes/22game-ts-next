@@ -3,7 +3,7 @@
 import {
   Box, Button, Dialog, DialogTitle, Grid, Stack, TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 import MuiInputTextField from '@/components/atom/Input';
 import inputList from '@/helpers/utils/inputs';
@@ -64,9 +64,11 @@ const FirstSection = () => {
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
 
+  const neverFunc = () => {};
+
   const textFieldOnChange = (value: string, functionConst: string) => {
     let disapatchCorrectValues = {
-      ...inputValues,
+      ...eachUserData,
       [functionConst]: value.replaceAll(' ', '').replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     };
 
@@ -90,7 +92,7 @@ const FirstSection = () => {
     const sells = getNormalNumber(disapatchCorrectValues.varSells); // Продажи - Переменные расходы
     const taxes = getNormalNumber(disapatchCorrectValues.varTaxes); // Налоги - Переменные расходы
 
-    const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellRegularPay);
+    const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellRegularPay); // Клиенты (платят регулярно) - Воронка продаж
 
     // Calculations <<< ----------------------------------------------------
     const firstApplications = (shows * firstCv1) / 100; // Заявки - Разовая воронка
@@ -141,6 +143,7 @@ const FirstSection = () => {
           mainMoneyFor: String(getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)),
         };
       }
+      return neverFunc();
     });
 
     setInputValues(() => ({
@@ -227,8 +230,14 @@ const FirstSection = () => {
     }
   };
 
+  useEffect(() => {
+    // const localInputValues = window.localStorage.getItem('inputValues');
+    // dispatch(setEachPlayerData(JSON.parse(localInputValues as string)));
+  }, []);
+
   return (
     <div>
+      <Button onClick={() => console.log(eachUserData)}>show</Button>
       <Grid container spacing={1}>
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Grid
