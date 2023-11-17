@@ -4,7 +4,7 @@ import RightMenuDrawer from '@/components/molecule/Drawer';
 import { getNormalNumber } from '@/helpers/utils/restyling';
 import useAppSelector from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/store';
-import { setAllRoundsData, setEachPlayerData } from '@/store/user/slice';
+import { setEachPlayerData } from '@/store/user/slice';
 import {
   Avatar,
   Box, Button, Dialog, DialogTitle, IconButton, Menu, MenuItem, Stack, TextField, Tooltip, Typography,
@@ -80,19 +80,26 @@ const Header = () => {
   const endRound = () => {
     const constantClients = getNormalNumber(eachUserData.sellConstClients);
     const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
+    const mainMoneyForAll = getNormalNumber(eachUserData.mainMoneyForAll);
+    const mainMoneyFor = getNormalNumber(eachUserData.mainMoneyFor);
 
     const dateCountRoundPayClients = {
       ...eachUserData,
       sellRegularPay: String(regularPayClients + constantClients),
+      mainMoneyForAll: (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       round: eachUserData.round + 1,
       date: new Date().toISOString(),
-      // allRoundsData: [...allRoundsData, dateCountRoundPayClients]
+      allRoundsData: [...eachUserData.allRoundsData, ({
+        ...eachUserData,
+        sellRegularPay: String(regularPayClients + constantClients),
+        mainMoneyForAll: (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+        round: eachUserData.round + 1,
+        date: new Date().toISOString(),
+      })],
     };
-
     window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
-    dispatch(setAllRoundsData([...allRoundsData, dateCountRoundPayClients]));
     handleClose();
   };
 
@@ -156,6 +163,23 @@ const Header = () => {
     setUserEmail(null);
   };
 
+  const headerInputs = [{
+    name: 'name',
+    label: 'Имя',
+  },
+  {
+    name: 'bussiness',
+    label: 'Бизнес',
+  },
+  {
+    name: 'gamePlan',
+    label: 'Цель на игру',
+  },
+  {
+    name: 'gameRequest',
+    label: 'Запрос на игру',
+  }];
+
   return (
     <Box sx={{
       display: 'flex',
@@ -181,36 +205,19 @@ const Header = () => {
       <RightMenuDrawer
         savedNotes={eachUserData.savedNotes}
       />
-      {
-        [{
-          name: 'name',
-          label: 'Имя',
-        },
-        {
-          name: 'bussiness',
-          label: 'Бизнес',
-        },
-        {
-          name: 'gamePlan',
-          label: 'Цель на игру',
-        },
-        {
-          name: 'gameRequest',
-          label: 'Запрос на игру',
-        }].map((item: any) => (
-          <TextField
-            key={item.label}
-            InputLabelProps={{
-              style: {
-                fontSize: 12,
-              },
-            }}
-            label={item.label}
-            value={gameMainValues[item.name as keyof typeof gameMainValues]}
-            onChange={(e: any) => handleOnChange(e, item.name)}
-          />
-        ))
-      }
+      {headerInputs.map((item: any) => (
+        <TextField
+          key={item.label}
+          InputLabelProps={{
+            style: {
+              fontSize: 12,
+            },
+          }}
+          label={item.label}
+          value={gameMainValues[item.name as keyof typeof gameMainValues]}
+          onChange={(e: any) => handleOnChange(e, item.name)}
+        />
+      ))}
 
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Настройки профиля">

@@ -1,7 +1,10 @@
 'use client';
 
 import {
-  Box, Button, Dialog, DialogTitle, Grid, Stack, TextField,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box, Button, Dialog, DialogTitle, Grid, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import './style.scss';
@@ -11,50 +14,51 @@ import { useAppDispatch } from '@/store';
 import { setEachPlayerData, DataOfUser } from '@/store/user/slice';
 import useAppSelector from '@/hooks/useAppSelector';
 import { getNormalNumber } from '@/helpers/utils/restyling';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { InputTitleWrapper, styleWithoutArrows } from './styles';
 
 const FirstSection = () => {
-  const [inputValues, setInputValues] = useState({
-    round: 0,
-    savedNotes: [],
-    firstShows: '',
-    firstCv1: '',
-    firstApplications: '',
-    firstCv2: '',
-    firstSells: '',
-    firstBill: '',
-    firstRevenue: '',
-    firstSpends: '',
-    firstProfit: '',
-    sellShows: '',
-    sellCV1: '',
-    sellApplications: '',
-    sellCV2: '',
-    sellSells: '',
-    sellCV3: '',
-    sellConstClients: '',
-    sellTotalSells: '',
-    sellRegularPay: '0',
-    sellBill: '',
-    sellRevenue: '',
-    varSells: '',
-    varCosts: '',
-    varMarketing: '',
-    varTaxes: '',
-    varTotalPercent: '',
-    varTotalCosts: '',
-    constFotOwner: '',
-    constFot: '',
-    constCreditAll: '',
-    constCreditPay: '',
-    constTotalCosts: '',
-    mainCosts: '',
-    percentClearProfit: '1',
-    mainClearProfit: '',
-    mainMoneyFor: '',
-    mainPersonalCapital: '',
-    constAddField: '',
-  });
+  // const [inputValues, setInputValues] = useState({
+  //   round: 0,
+  //   savedNotes: [],
+  //   firstShows: '',
+  //   firstCv1: '',
+  //   firstApplications: '',
+  //   firstCv2: '',
+  //   firstSells: '',
+  //   firstBill: '',
+  //   firstRevenue: '',
+  //   firstSpends: '',
+  //   firstProfit: '',
+  //   sellShows: '',
+  //   sellCV1: '',
+  //   sellApplications: '',
+  //   sellCV2: '',
+  //   sellSells: '',
+  //   sellCV3: '',
+  //   sellConstClients: '',
+  //   sellTotalSells: '',
+  //   sellRegularPay: '0',
+  //   sellBill: '',
+  //   sellRevenue: '',
+  //   varSells: '',
+  //   varCosts: '',
+  //   varMarketing: '',
+  //   varTaxes: '',
+  //   varTotalPercent: '',
+  //   varTotalCosts: '',
+  //   constFotOwner: '',
+  //   constFot: '',
+  //   constCreditAll: '',
+  //   constCreditPay: '',
+  //   constTotalCosts: '',
+  //   mainCosts: '',
+  //   percentClearProfit: '1',
+  //   mainClearProfit: '',
+  //   mainMoneyFor: '',
+  //   mainPersonalCapital: '',
+  //   constAddField: '',
+  // });
 
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogValue, setDialogValue] = useState('');
@@ -64,13 +68,23 @@ const FirstSection = () => {
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
 
-  const neverFunc = () => {};
+  // const neverFunc = () => {};
 
   const textFieldOnChange = (value: string, functionConst: string) => {
     let disapatchCorrectValues = {
       ...eachUserData,
       [functionConst]: value.replaceAll(' ', '').replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     };
+
+    if (functionConst === 'nothing') {
+      disapatchCorrectValues = {
+        ...eachUserData,
+        firstShows: '',
+        firstCv1: '',
+        firstCv2: '',
+        firstBill: '',
+      };
+    }
 
     // Constants <<< ----------------------------------------------------
     const shows = getNormalNumber(disapatchCorrectValues.firstShows); // Показы - Разовая воронка
@@ -92,7 +106,8 @@ const FirstSection = () => {
     const sells = getNormalNumber(disapatchCorrectValues.varSells); // Продажи - Переменные расходы
     const taxes = getNormalNumber(disapatchCorrectValues.varTaxes); // Налоги - Переменные расходы
     const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellRegularPay); // Клиенты (платят регулярно) - Воронка продаж
-    let mainMoneyFor = getNormalNumber(disapatchCorrectValues.mainMoneyFor); // Денег на расч / счете - Основное поле
+    // let mainMoneyFor = getNormalNumber(disapatchCorrectValues.mainMoneyFor); // Денег на расч / счете - Основное поле
+    // const mainMoneyForAll = getNormalNumber(disapatchCorrectValues.mainMoneyForAll); // Денег на расч / счете подсчитанное значени - Основное поле
 
     // Calculations <<< ----------------------------------------------------
     const firstApplications = Math.round((shows * firstCv1) / 100); // Заявки - Разовая воронка
@@ -111,9 +126,9 @@ const FirstSection = () => {
     const totalCosts = Math.round(constantCostsFotOwner + constantCostsFot + constantCostsCreditPay + constAddField); // Итого - Постоянные расходы
     const mainCostsFieldClearProfit = Math.round(revenue - (varCostsTotalCosts + totalCosts)); // Чистая прибыль - Основное поле
 
-    if (disapatchCorrectValues.round !== 0) {
-      mainMoneyFor = Math.round(mainCostsFieldClearProfit + firstFunProfit); // Денег на расч / счете - Основное поле
-    }
+    // if (disapatchCorrectValues.round !== 0) {
+    const mainMoneyFor = Math.round(mainCostsFieldClearProfit * percClearProf + firstFunProfit); // Денег на расч / счете - Основное поле
+    // }
 
     disapatchCorrectValues = {
       ...disapatchCorrectValues,
@@ -135,27 +150,29 @@ const FirstSection = () => {
       constTotalCosts: totalCosts.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     };
 
-    if (disapatchCorrectValues.round !== 0) {
-      inputValues.savedNotes.map((item: any) => {
-        if (item.whatHappened === 'Убавить') {
-          disapatchCorrectValues = {
-            ...disapatchCorrectValues,
-            mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-          };
-        }
-        if (item.whatHappened === 'Добавить') {
-          disapatchCorrectValues = {
-            ...disapatchCorrectValues,
-            mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-          };
-        }
-        return neverFunc();
-      });
-    }
+    // if (disapatchCorrectValues.round !== 0) {
+    //   inputValues.savedNotes.map((item: any) => {
+    //     if (item.whatHappened === 'Убавить') {
+    //       disapatchCorrectValues = {
+    //         ...disapatchCorrectValues,
+    //         // mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    //         mainMoneyFor: (mainMoneyFor - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    //       };
+    //     }
+    //     if (item.whatHappened === 'Добавить') {
+    //       disapatchCorrectValues = {
+    //         ...disapatchCorrectValues,
+    //         // mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    //         mainMoneyFor: (mainMoneyFor + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    //       };
+    //     }
+    //     return neverFunc();
+    //   });
+    // }
 
-    setInputValues(() => ({
-      ...disapatchCorrectValues,
-    }));
+    // setInputValues(() => ({
+    //   ...disapatchCorrectValues,
+    // }));
 
     dispatch(setEachPlayerData({
       ...disapatchCorrectValues,
@@ -177,8 +194,9 @@ const FirstSection = () => {
     setOpenDialog(true);
   };
   const saveNote = () => {
-    const moneyFor = inputValues.mainMoneyFor;
-    const newSaveNote: any = inputValues.savedNotes;
+    // const moneyFor = inputValues.mainMoneyFor;
+    const moneyFor = eachUserData.mainMoneyForAll;
+    const newSaveNote: any = eachUserData.savedNotes;
     let totalMoney = 0;
 
     const newSavedNoteValue = {
@@ -195,15 +213,15 @@ const FirstSection = () => {
       totalMoney = getNormalNumber(moneyFor) + getNormalNumber(dialogAmount);
     }
 
-    setInputValues((prev: any) => ({
-      ...prev,
-      savedNotes: [...newSaveNote, newSavedNoteValue],
-      mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    }));
+    // setInputValues((prev: any) => ({
+    //   ...prev,
+    //   savedNotes: [...newSaveNote, newSavedNoteValue],
+    //   mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+    // }));
     dispatch(setEachPlayerData({
       ...eachUserData,
       savedNotes: [...newSaveNote, newSavedNoteValue],
-      mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      mainMoneyForAll: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     }));
 
     handleClose();
@@ -211,44 +229,42 @@ const FirstSection = () => {
 
   const addClientsRegularPay = (isIncrease: boolean) => {
     if (isIncrease) {
-      setInputValues((prev: any) => ({
-        ...prev,
-        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
-      }));
+      // setInputValues((prev: any) => ({
+      //   ...prev,
+      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
+      // }));
       dispatch(setEachPlayerData({
         ...eachUserData,
-        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
+        sellRegularPay: String(getNormalNumber(eachUserData.sellRegularPay) + 1),
       }));
     }
 
-    if (inputValues.sellRegularPay === '0') {
+    if (eachUserData.sellRegularPay === '0') {
       return;
     }
 
     if (!isIncrease) {
-      setInputValues((prev: any) => ({
-        ...prev,
-        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
-      }));
+      // setInputValues((prev: any) => ({
+      //   ...prev,
+      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
+      // }));
       dispatch(setEachPlayerData({
         ...eachUserData,
-        sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
+        sellRegularPay: String(getNormalNumber(eachUserData.sellRegularPay) - 1),
       }));
     }
   };
 
   useEffect(() => {
-    // const localInputValues = window.localStorage.getItem('inputValues');
-    // dispatch(setEachPlayerData(JSON.parse(localInputValues as string)));
-  }, []);
+    textFieldOnChange('', 'nothing');
+  }, [eachUserData.round]);
 
   return (
     <div>
-      {/* <Button onClick={() => console.log(eachUserData)}>show</Button> */}
-      <Grid container spacing={1}>
+      <Grid container spacing={1} justifyContent="center">
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Grid
-          xs={3}
+          xs={2.5}
           item
         >
           <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
@@ -275,12 +291,12 @@ const FirstSection = () => {
 
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
         <Grid
-          xs
+          xs={3}
           item
         >
           <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
           <Box sx={{
-            px: 4,
+            px: 6,
           }}
           >
 
@@ -378,6 +394,18 @@ const FirstSection = () => {
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{
+              mb: 1,
+            }}
+          >
+            <Typography color="white" fontSize={15}>На счете</Typography>
+            <Typography color="white" fontSize={15}>
+              {eachUserData.mainMoneyForAll ? eachUserData.mainMoneyForAll : '0'}
+            </Typography>
+          </Stack>
           {/* Start ---------------- ДОБАВИТЬ/УБАВИТЬ - переменные расходы --------------- Start */}
           <Stack
             display="flex"

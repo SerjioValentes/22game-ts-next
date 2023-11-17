@@ -5,7 +5,7 @@ export const getNumberWithSpaces = () => {
 
 export const getNormalNumber = (value: string | number) => {
   if (value) {
-    return Number(value.toString().replaceAll(' ', ''));
+    return Number(value.toString().replaceAll(' ', '').replaceAll(',', '.'));
   }
   const result = 0;
   return result;

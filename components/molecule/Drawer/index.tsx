@@ -13,7 +13,7 @@ import useAppSelector from '@/hooks/useAppSelector';
 export default function RightMenuDrawer({ savedNotes }: any) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [whatToShow, setWhatToShow] = useState('articles');
-  const allRoundsData = useAppSelector((state) => state.user.allRoundsData);
+  const { allRoundsData } = useAppSelector((state) => state.user.data);
   // const dispatch = useAppDispatch();
 
   const openDrawer = () => {
@@ -29,10 +29,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
   //   dispatch(dispatchSetSavedNotes(newSavedNotes));
   // };
   const changeData = (data: string) => {
-    if (data === 'articles') {
-      setWhatToShow('articles');
-    }
-    setWhatToShow('allRounds');
+    setWhatToShow(data);
   };
 
   return (
@@ -58,8 +55,15 @@ export default function RightMenuDrawer({ savedNotes }: any) {
               p: 2,
             }}
           >
-            <Button color={whatToShow === 'articles' ? 'secondary' : 'primary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
-            <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
+            {/* <Button onClick={() => {
+              console.log(allRoundsData);
+            }}
+            >
+              show
+
+            </Button> */}
+            <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
+            <Button color={whatToShow === 'allRounds' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
           </Stack>
           {whatToShow === 'articles' ? savedNotes.map((item: any) => (
             <List
@@ -123,7 +127,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
                     Денег на Расч/Счет
                   </Typography>
                   <Typography>
-                    {itemRound.mainMoneyFor}
+                    {itemRound.mainMoneyForAll}
                   </Typography>
                 </Stack>
               </List>
