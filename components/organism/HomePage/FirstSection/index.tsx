@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  Box, Button, Dialog, DialogTitle, Grid, Stack, TextField, Typography,
+  Box, Button, Dialog, DialogTitle, Divider, Grid, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import './style.scss';
@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/store';
 import { setEachPlayerData, DataOfUser } from '@/store/user/slice';
 import useAppSelector from '@/hooks/useAppSelector';
 import { getNormalNumber } from '@/helpers/utils/restyling';
+import useWindowSize from '@/hooks/useWindowSize';
 import { InputTitleWrapper, styleWithoutArrows } from './styles';
 
 const FirstSection = () => {
@@ -22,7 +23,7 @@ const FirstSection = () => {
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
-
+  const isMobileSize = useWindowSize();
   // const neverFunc = () => {};
 
   const textFieldOnChange = (value: string, functionConst: string) => {
@@ -186,13 +187,17 @@ const FirstSection = () => {
   }, [eachUserData.round]);
 
   return (
-    <div>
-      <Grid container spacing={1} justifyContent="center">
+    <Stack>
+      <Stack
+        direction={isMobileSize ? 'column' : 'row'}
+        spacing={2}
+        sx={{
+          maxWidth: '1200px',
+          mx: 'auto',
+        }}
+      >
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
-        <Grid
-          xs={2.5}
-          item
-        >
+        <Stack minWidth={250}>
           <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
           <Box sx={{
             border: '1px solid white',
@@ -212,22 +217,18 @@ const FirstSection = () => {
 
             ))}
           </Box>
-        </Grid>
+        </Stack>
         {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
 
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
-        <Grid
-          xs={3}
-          item
-        >
-          <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
-          <Box sx={{
+        <Stack
+          sx={{
             px: 6,
           }}
-          >
-
+        >
+          <Stack minWidth={250}>
+            <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
             {inputList.sellFunnel_01.map((item) => (
-
               <MuiInputTextField
                 key={item.functionConst}
                 sx={styleWithoutArrows}
@@ -254,7 +255,6 @@ const FirstSection = () => {
               spacing={2}
               display="flex"
             >
-
               <Button
                 sx={{
                   fontSize: 10,
@@ -288,38 +288,43 @@ const FirstSection = () => {
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
-          </Box>
-        </Grid>
+          </Stack>
+
+        </Stack>
 
         {/* End ---------------- ВОРОНКА ПРОДАЖ --------------- End */}
 
         {/* Start ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- Start */}
-        <Grid
-          xs={2}
-          item
-        >
-          <InputTitleWrapper>Переменные расходы</InputTitleWrapper>
-          {inputList.variableCosts.map((item) => (
-            <MuiInputTextField
-              key={item.functionConst}
-              sx={styleWithoutArrows}
-              disabled={item.disabled}
-              label={item.label}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
-              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-            />
-          ))}
-          <hr />
-          {inputList.mainCostsField.map((item) => (
-            <MuiInputTextField
-              key={item.functionConst}
-              sx={styleWithoutArrows}
-              label={item.label}
-              disabled={item.disabled}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
-              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-            />
-          ))}
+        <Stack minWidth={250}>
+          <div>
+
+            <InputTitleWrapper>Переменные расходы</InputTitleWrapper>
+            {inputList.variableCosts.map((item) => (
+              <MuiInputTextField
+                key={item.functionConst}
+                sx={styleWithoutArrows}
+                disabled={item.disabled}
+                label={item.label}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+              />
+            ))}
+          </div>
+          <Divider sx={{ backgroundColor: 'white', my: 2 }} />
+          <div>
+
+            {inputList.mainCostsField.map((item) => (
+              <MuiInputTextField
+                key={item.functionConst}
+                sx={styleWithoutArrows}
+                label={item.label}
+                disabled={item.disabled}
+                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+              />
+            ))}
+
+          </div>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -364,11 +369,8 @@ const FirstSection = () => {
           </Stack>
           {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
           {/* End ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- End */}
-        </Grid>
-        <Grid
-          xs={2}
-          item
-        >
+        </Stack>
+        <Stack minWidth={250}>
           <InputTitleWrapper>Постоянные расходы</InputTitleWrapper>
           {inputList.constantCosts.map((item) => (
             <MuiInputTextField
@@ -380,51 +382,49 @@ const FirstSection = () => {
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
-        </Grid>
+        </Stack>
+      </Stack>
+      <Dialog onClose={handleClose} open={openDialog}>
+        <Box sx={{
+          p: 4,
+        }}
+        >
 
-        <Dialog onClose={handleClose} open={openDialog}>
-          <Box sx={{
-            p: 4,
-          }}
-          >
+          <DialogTitle>
+            {dialogValue}
+            {' '}
+            к расчетному счету
+          </DialogTitle>
+          <TextField
+            onChange={(e) => setDialogAmount(e.target.value)}
+            value={dialogAmount}
+            type="number"
+            label="Количество"
+            fullWidth
+            autoFocus
+            variant="outlined"
+            sx={{
+              '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+                display: 'none',
+              },
+            }}
+          />
+          <TextField
+            onChange={(e) => setDialogNote(e.target.value)}
+            value={dialogNote}
+            label="Заметка кому и на что"
+            fullWidth
+            autoFocus
+            variant="outlined"
+            sx={{
+              my: 2,
+            }}
+          />
 
-            <DialogTitle>
-              {dialogValue}
-              {' '}
-              к расчетному счету
-            </DialogTitle>
-            <TextField
-              onChange={(e) => setDialogAmount(e.target.value)}
-              value={dialogAmount}
-              type="number"
-              label="Количество"
-              fullWidth
-              autoFocus
-              variant="outlined"
-              sx={{
-                '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-                  display: 'none',
-                },
-              }}
-            />
-            <TextField
-              onChange={(e) => setDialogNote(e.target.value)}
-              value={dialogNote}
-              label="Заметка кому и на что"
-              fullWidth
-              autoFocus
-              variant="outlined"
-              sx={{
-                my: 2,
-              }}
-            />
-
-            <Button onClick={saveNote} variant="contained">{dialogValue}</Button>
-          </Box>
-        </Dialog>
-      </Grid>
-      <div />
-    </div>
+          <Button onClick={saveNote} variant="contained">{dialogValue}</Button>
+        </Box>
+      </Dialog>
+    </Stack>
   );
 };
 

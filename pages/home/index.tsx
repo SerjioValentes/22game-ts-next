@@ -17,7 +17,7 @@ const HomePage = () => (
         <Header />
       </Box>
       <Box sx={{
-        p: 4,
+        pt: 4,
       }}
       >
         <div>
