@@ -7,7 +7,9 @@ export interface DataOfUser {
   firstShows: string,
   firstCv1: string,
   savedNotes: [],
+  // TODO - Нужно как то выпилисть из БД - Создается еще оди экземпляр пустойц
   allRoundsData: [],
+  // TODO - Нужно как то выпилисть из БД - Создается еще оди экземпляр пустойц
   firstApplications: string,
   firstCv2: string,
   firstBill: string,

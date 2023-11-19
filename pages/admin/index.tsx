@@ -2,8 +2,11 @@
 
 import { firebaseDb } from '@/helpers/firebase/config';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Button, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography,
 } from '@mui/material';
 import {
   collection, doc, getDocs, setDoc,
@@ -20,7 +23,6 @@ const AdminPage = () => {
   const createGameRoom = async (data: any) => {
     try {
       await setDoc(doc(firebaseDb, 'rooms', roomName), data);
-      // console.log('Document written with ID: ', docRef);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -37,9 +39,11 @@ const AdminPage = () => {
     const usersArray: any = [];
     try {
       const querySnapshot = await getDocs(collection(firebaseDb, 'users'));
-      querySnapshot.forEach((docItem: any) => {
-        usersArray.push(docItem.id as string);
-      });
+      console.log(querySnapshot);
+
+      // querySnapshot.forEach((docItem: any) => {
+      //   usersArray.push(docItem.id as string);
+      // });
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -57,7 +61,6 @@ const AdminPage = () => {
 
   const handlerDeleteUser = (item: string) => {
     const newSavedUsers = savedUsers.filter((savedUsersItem: string) => savedUsersItem !== item);
-    // console.log(newSavedUsers);
     setSavedUsers(newSavedUsers);
   };
 
@@ -66,131 +69,54 @@ const AdminPage = () => {
     try {
       const querySnapshot = await getDocs(collection(firebaseDb, 'users'));
       querySnapshot.forEach((docItem: any) => {
-        // console.log(docItem.data());
+        // console.log('docItem', docItem);
         usersData = [...usersData, {
           email: docItem.id,
           data: docItem.data(),
         }];
       });
+      console.log(usersData);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
     setAllUsersData(usersData);
   };
+  const [dialogCreateNew, setDialogCreateNew] = useState(false);
 
   return (
     <Box>
-      <Box sx={{
-        p: 4,
-        border: '1px solid black',
-      }}
-      >
-        <Button onClick={handleCreateRoom}>Create new game room</Button>
-        <Button onClick={getUsers}>get users for useEffct</Button>
-        <Button onClick={() => {
-          console.log(allUsersData);
-        }}
-        >
-          CHECK SOME DATA
-
-        </Button>
-      </Box>
       <Stack
+        direction="row"
         spacing={2}
         sx={{
           p: 4,
-          // border: '1px solid black',
+          border: '1px solid black',
         }}
       >
-        <TextField
-          label="Название комнаты"
-          onChange={(e) => setRoomName(e.target.value)}
-        />
+        <Button variant="contained" onClick={() => setDialogCreateNew(true)}>Создать комнату</Button>
+        <Button onClick={handleShowPlayerResults} variant="contained">Обновить результаты</Button>
       </Stack>
-      <Stack
-        spacing={2}
-        sx={{
-          p: 4,
-        }}
-      >
-
-        <InputLabel
-          id="select-label"
-        >
-          Выберете пользователей
-
-        </InputLabel>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <Select
-            id="select-label"
-            variant="outlined"
-            defaultValue="sd"
-            onChange={handleSelectChange}
-          >
-            {allUsers && allUsers.map((item: any) => (
-              <MenuItem
-                key={item}
-                value={item}
-              >
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Stack sx={{
-          py: 4,
-        }}
-        >
-          <Typography
-            sx={{
-              my: 1,
-            }}
-            variant="h5"
-          >
-            Список пользователей
-
-          </Typography>
-          {savedUsers.map((item: any) => (
-            <Stack
-              key={item}
-              direction="row"
-              spacing={4}
-            >
-              <div>
-                {item}
-              </div>
-              <IconButton onClick={() => handlerDeleteUser(item)}>
-                <DeleteForeverIcon />
-              </IconButton>
-            </Stack>
-          ))}
-        </Stack>
-      </Stack>
-      <Button onClick={handleCreateRoom} fullWidth variant="contained">Create room</Button>
-      <Button onClick={handleShowPlayerResults} fullWidth variant="contained">Reload players results</Button>
 
       <Grid container>
-        <Grid item xs={1}>
-          <Stack
-            spacing={4}
-            sx={{
-              pt: 4,
-              pl: 4,
-            }}
-          >
-            <div>Ход</div>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>
-            <div>7</div>
-            <div>8</div>
-            <div>9</div>
-            <div>10</div>
-          </Stack>
-        </Grid>
+        {
+           allUsersData.length > 0
+          && (
+          <Grid item xs={1}>
+            <Stack
+              spacing={4}
+              sx={{
+                pt: 4,
+                pl: 4,
+              }}
+            >
+              <div>Ход</div>
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((item) => (
+                <Typography key={item} fontWeight={800}>{item}</Typography>
+              ))}
+            </Stack>
+          </Grid>
+          )
+          }
         <Grid item xs={11}>
           <Stack
             direction="row"
@@ -199,25 +125,25 @@ const AdminPage = () => {
               p: 4,
             }}
           >
-
-            {allUsersData && allUsersData.map((eachUserData: any) => (
+            {allUsersData && allUsersData.map((eachUser: any) => (
               <Box
-                key={eachUserData.email}
+                key={eachUser.email}
               >
                 <Stack direction="column" spacing={2}>
                   <Typography fontWeight={800}>
-                    {eachUserData.email}
+                    {eachUser.email}
                   </Typography>
                   <Stack spacing={1}>
-                    {eachUserData.data.allRoundsData.map((item: any) => (
+                    {eachUser.data.allRoundsData.map((item: any) => (
                       <Stack
                         key={item.date}
                       >
                         <TextField
-                          label={`Ход: ${item.round}`}
+                          // label={`Ход: ${item.round}`}
                           disabled
-                          value={item.mainMoneyFor}
+                          value={item.mainMoneyForAll}
                         />
+                        {/* <Button variant="contained" onClick={() => console.log(item)}>show</Button> */}
                       </Stack>
                     ))}
                   </Stack>
@@ -227,6 +153,117 @@ const AdminPage = () => {
           </Stack>
         </Grid>
       </Grid>
+      <Dialog
+        PaperProps={{
+          style: {
+            borderRadius: 30,
+          },
+        }}
+        open={dialogCreateNew}
+        onClose={() => setDialogCreateNew(!dialogCreateNew)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Stack sx={{
+          p: 10,
+        }}
+        >
+          <DialogTitle
+            sx={{
+              py: 4,
+
+            }}
+            align="center"
+            fontWeight={800}
+          >
+            Создать новую комнату
+          </DialogTitle>
+          <DialogContent>
+            {/* Start ---------------- First Section */}
+            <Stack spacing={2}>
+              <Stack>
+                <TextField
+                  label="Название комнаты"
+                  onChange={(e) => setRoomName(e.target.value)}
+                />
+
+                <InputLabel
+                  variant="outlined"
+                  sx={{
+                    my: 3,
+                    fontSize: '1.2rem',
+                  }}
+                >
+                  Выберете пользователей
+
+                </InputLabel>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    id="select-label"
+                    variant="outlined"
+                    defaultValue="sd"
+                    onChange={handleSelectChange}
+                  >
+                    {allUsers && allUsers.map((item: any) => (
+                      <MenuItem
+                        key={item}
+                        value={item}
+                      >
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+
+              {/* Start -------- List of users */}
+              <Stack>
+                <Accordion>
+                  <AccordionSummary>
+
+                    <Typography>
+                      Список пользователей
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {savedUsers.map((item: any) => (
+                      <Stack
+                        key={item}
+                        direction="row"
+                        spacing={4}
+                      >
+                        <div>
+                          {item}
+                        </div>
+                        <IconButton onClick={() => handlerDeleteUser(item)}>
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      </Stack>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              </Stack>
+
+              {/* End -------- List of users */}
+            </Stack>
+            {/* End ---------------- First Section */}
+          </DialogContent>
+          <DialogActions>
+            <Button
+              color="info"
+              sx={{
+                mt: 4,
+                py: 2,
+              }}
+              fullWidth
+              variant="contained"
+              onClick={handleCreateRoom}
+            >
+              Создать новую комнату
+            </Button>
+          </DialogActions>
+        </Stack>
+      </Dialog>
     </Box>
   );
 };

@@ -35,7 +35,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
   return (
     <div>
       <Button onClick={openDrawer}>
-        <MenuIcon color="primary" />
+        <MenuIcon color="secondary" />
       </Button>
 
       <MuiDrawer
@@ -62,8 +62,8 @@ export default function RightMenuDrawer({ savedNotes }: any) {
               show
 
             </Button> */}
-            <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
-            <Button color={whatToShow === 'allRounds' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
+            <Button color={whatToShow === 'allRounds' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
+            <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
           </Stack>
           {whatToShow === 'articles' ? savedNotes?.map((item: any) => (
             <List

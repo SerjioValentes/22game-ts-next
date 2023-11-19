@@ -17,6 +17,12 @@ const theme: Theme = createTheme({
           '& label.Mui-focused': {
             color: '#000',
           },
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#000',
+              border: '1px solid #000',
+            },
+          },
         },
       },
     },
@@ -36,16 +42,33 @@ const theme: Theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#42a5f5',
+      main: '#fff',
       light: '#42a5f5',
       dark: '#1565c0',
-      contrastText: '#fff',
+      contrastText: '#000',
     },
     secondary: {
-      main: '#fff',
-      contrastText: '#000',
+      main: '#42a5f5',
+      contrastText: '#fff',
+    },
+    error: {
+      main: '#c62828',
+      contrastText: '#fff',
+    },
+    info: {
+      main: '#000',
+      light: 'gray',
+      dark: 'gray',
+      contrastText: '#fff',
     },
   },
 });
 
 export default theme;
+
+// main: '#42a5f5',
+// light: '#42a5f5',
+// dark: '#1565c0',
+// contrastText: '#fff',
+// main: '#fff',
+// contrastText: '#000',

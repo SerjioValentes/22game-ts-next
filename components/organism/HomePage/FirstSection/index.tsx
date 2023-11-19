@@ -1,6 +1,9 @@
 'use client';
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box, Button, Dialog, DialogTitle, Divider, Grid, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +23,8 @@ const FirstSection = () => {
   const [dialogValue, setDialogValue] = useState('');
   const [dialogAmount, setDialogAmount] = useState('');
   const [dialogNote, setDialogNote] = useState('');
+  // Accordion opening control
+  const [isFirstAccOpen, setIsFirstAccOpen] = useState(false);
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
@@ -143,6 +148,7 @@ const FirstSection = () => {
     if (dialogValue === 'Убавить') {
       totalMoney = getNormalNumber(moneyFor) - getNormalNumber(dialogAmount);
     }
+
     if (dialogValue === 'Добавить') {
       totalMoney = getNormalNumber(moneyFor) + getNormalNumber(dialogAmount);
     }
@@ -176,14 +182,7 @@ const FirstSection = () => {
   };
 
   useEffect(() => {
-  // const localEachUserData = window.localStorage.getItem('inputValues');
-  // if (localEachUserData) {
-  //   dispatch(setEachPlayerData(JSON.parse(localEachUserData as string)));
-  // }
-    // if (!isFirstLoad) {
     textFieldOnChange('', 'nothing');
-    // }
-    // setIsFirstLoad(false);
   }, [eachUserData.round]);
 
   return (
@@ -194,29 +193,44 @@ const FirstSection = () => {
         sx={{
           maxWidth: '1200px',
           mx: 'auto',
+          px: 10,
         }}
       >
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
-        <Stack minWidth={250}>
-          <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
-          <Box sx={{
-            border: '1px solid white',
-            borderRadius: 2,
-            p: 2,
-          }}
+        <Stack maxWidth={200}>
+          <Accordion
+            onChange={() => setIsFirstAccOpen(!isFirstAccOpen)}
+            expanded={isFirstAccOpen}
+            sx={{
+              backgroundColor: 'rgba(57, 105, 125, 0.5)',
+            }}
           >
-            {inputList.firstFunnel.map((item) => (
-              <MuiInputTextField
-                key={item.functionConst}
-                sx={styleWithoutArrows}
-                disabled={item.disabled}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
-                label={item.label}
-                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-              />
+            <AccordionSummary
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
+            </AccordionSummary>
+            <AccordionDetails>
 
-            ))}
-          </Box>
+              <Box sx={{
+                borderRadius: 2,
+              }}
+              >
+                {inputList.firstFunnel.map((item) => (
+                  <MuiInputTextField
+                    key={item.functionConst}
+                    sx={styleWithoutArrows}
+                    disabled={item.disabled}
+                    value={eachUserData[item.functionConst as keyof DataOfUser]}
+                    label={item.label}
+                    onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+                  />
+
+                ))}
+              </Box>
+            </AccordionDetails>
+          </Accordion>
         </Stack>
         {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
 
@@ -226,8 +240,10 @@ const FirstSection = () => {
             px: 6,
           }}
         >
-          <Stack minWidth={250}>
-            <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
+          <Stack maxWidth={200}>
+            <Stack pb={2}>
+              <InputTitleWrapper>Воронка продаж</InputTitleWrapper>
+            </Stack>
             {inputList.sellFunnel_01.map((item) => (
               <MuiInputTextField
                 key={item.functionConst}
@@ -256,6 +272,7 @@ const FirstSection = () => {
               display="flex"
             >
               <Button
+                color="secondary"
                 sx={{
                   fontSize: 10,
                   fontWeight: 600,
@@ -267,6 +284,7 @@ const FirstSection = () => {
                 Добавить
               </Button>
               <Button
+                color="secondary"
                 sx={{
                   fontSize: 10,
                   fontWeight: 600,
@@ -295,21 +313,20 @@ const FirstSection = () => {
         {/* End ---------------- ВОРОНКА ПРОДАЖ --------------- End */}
 
         {/* Start ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- Start */}
-        <Stack minWidth={250}>
-          <div>
-
+        <Stack maxWidth={220}>
+          <Stack pb={2}>
             <InputTitleWrapper>Переменные расходы</InputTitleWrapper>
-            {inputList.variableCosts.map((item) => (
-              <MuiInputTextField
-                key={item.functionConst}
-                sx={styleWithoutArrows}
-                disabled={item.disabled}
-                label={item.label}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
-                onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
-              />
-            ))}
-          </div>
+          </Stack>
+          {inputList.variableCosts.map((item) => (
+            <MuiInputTextField
+              key={item.functionConst}
+              sx={styleWithoutArrows}
+              disabled={item.disabled}
+              label={item.label}
+              value={eachUserData[item.functionConst as keyof DataOfUser]}
+              onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
+            />
+          ))}
           <Divider sx={{ backgroundColor: 'white', my: 2 }} />
           <div>
 
@@ -345,6 +362,7 @@ const FirstSection = () => {
           >
 
             <Button
+              color="secondary"
               sx={{
                 fontSize: 10,
                 fontWeight: 600,
@@ -357,6 +375,7 @@ const FirstSection = () => {
 
             </Button>
             <Button
+              color="secondary"
               sx={{
                 fontSize: 10,
                 fontWeight: 600,
@@ -370,8 +389,10 @@ const FirstSection = () => {
           {/* End ---------------- ДОБАВИТЬ / УБАВИТЬ - переменные расходы --------------- End */}
           {/* End ---------------- ПЕРЕМЕННЫЕ РАСХОДЫ --------------- End */}
         </Stack>
-        <Stack minWidth={250}>
-          <InputTitleWrapper>Постоянные расходы</InputTitleWrapper>
+        <Stack maxWidth={220}>
+          <Stack pb={2}>
+            <InputTitleWrapper>Постоянные расходы</InputTitleWrapper>
+          </Stack>
           {inputList.constantCosts.map((item) => (
             <MuiInputTextField
               key={item.functionConst}

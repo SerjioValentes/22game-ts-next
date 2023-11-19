@@ -10,27 +10,33 @@ const errorValidation = (errorCode: string) => {
   const errorArray = [];
 
   if (errorCode === 'auth/email-already-in-use') {
-    errorArray.push('Email already in use. If you have any account just checkIn');
+    // errorArray.push('Email already in use. If you have any account just checkIn');
+    errorArray.push('Почта уже занята. Проверьте, возможно у вас уже есть аккаунт');
   }
 
   if (errorCode === 'auth/user-not-found') {
-    errorArray.push('User not found');
+    // errorArray.push('User not found');
+    errorArray.push('Пользователь не найден');
   }
 
   if (errorCode === 'auth/weak-password') {
-    errorArray.push('Weak password');
+    // errorArray.push('Weak password');
+    errorArray.push('Слабый пароль');
   }
 
   if (errorCode === 'auth/wrong-password') {
-    errorArray.push('Wrong password');
+    // errorArray.push('Wrong password');
+    errorArray.push('Неверный email или пароль');
   }
 
   if (errorCode === 'auth/missing-password') {
-    errorArray.push('Missing password');
+    // errorArray.push('Missing password');
+    errorArray.push('Отсутствует пароль');
   }
 
   if (errorCode === 'auth/invalid-email') {
-    errorArray.push('Invalid email');
+    // errorArray.push('Invalid email');
+    errorArray.push('Неверный email или пароль');
   }
   return errorArray;
 };

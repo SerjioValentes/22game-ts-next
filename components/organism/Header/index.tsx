@@ -16,12 +16,13 @@ import { firebaseDb } from '@/helpers/firebase/config';
 import {
   doc, setDoc,
 } from 'firebase/firestore';
+import theme from '@/helpers/ThemeProvider';
 import FormWrapper from '../AuthForm/style';
 import { IUserData } from '../AuthForm';
 
 const Header = () => {
   const [isDialogEndRoundOpen, setIsDialogEndRoundOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState<null | string>(null);
+  const [userEmail, setUserEmail] = useState<null | string | undefined>(null);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [gameMainValues, setGameMainValues] = useState({
     name: '',
@@ -37,7 +38,7 @@ const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const [errors, setErrors] = useState([]);
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   // const { allRoundsData } = useAppSelector((state) => state.user);
@@ -110,6 +111,9 @@ const Header = () => {
     const mainMoneyForAll = getNormalNumber(eachUserData.mainMoneyForAll);
     const mainMoneyFor = getNormalNumber(eachUserData.mainMoneyFor);
 
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TODO - AllRounds data will add again in each round !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const dateCountRoundPayClients = {
       ...eachUserData,
       sellRegularPay: String(regularPayClients + constantClients),
@@ -127,7 +131,8 @@ const Header = () => {
     window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
-    // setDataToFire(dateCountRoundPayClients);
+    console.log(dateCountRoundPayClients);
+    setDataToFire(dateCountRoundPayClients);
     handleClose();
   };
 
@@ -141,6 +146,7 @@ const Header = () => {
   const handleLogInUser = () => {
     setIsAuthDialogOpen(true);
     setAnchorElUser(null);
+    // setIsNewUser(false);
   };
 
   const userDataOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -192,19 +198,11 @@ const Header = () => {
       width: '100%',
       p: 2,
       gap: 1,
-      backgroundColor: 'secondary.main',
+      backgroundColor: 'primary.main',
     }}
     >
-      {/* <Button onClick={() => {
-        const localEachUserData = window.localStorage.getItem('inputValues');
-        console.log('inputValues', JSON.parse(localEachUserData as string));
-        console.log('eachUserData', eachUserData);
-      }}
-      >
-        show
-
-      </Button> */}
       <Button
+        color="secondary"
         sx={{
           fontSize: '12px',
           px: 4,
@@ -257,18 +255,18 @@ const Header = () => {
           {!userEmail
             ? (
               <MenuItem onClick={handleLogInUser}>
-                <Typography onClick={handleLogInUser}>LogIn</Typography>
+                <Typography onClick={handleLogInUser}>Войти</Typography>
               </MenuItem>
             )
             : (
               <>
                 <MenuItem onClick={handleLogOut}>
-                  <Typography onClick={handleLogOut}>LogOut</Typography>
+                  <Typography onClick={handleLogOut}>Выйти</Typography>
                 </MenuItem>
                 {userEmail === 'admin@user.com'
                 && (
                   <MenuItem>
-                    <Typography>admin page</Typography>
+                    <Typography>Управление</Typography>
                   </MenuItem>
                 )}
               </>
@@ -276,17 +274,6 @@ const Header = () => {
 
         </Menu>
       </Box>
-      <Dialog onClose={handleClose} open={isAuthDialogOpen}>
-        <FormWrapper>
-          <TextField name="email" placeholder="email" onChange={userDataOnChange} />
-          <TextField name="password" placeholder="password" onChange={userDataOnChange} />
-          {errors.map((error: string) => <div key={error}>{error}</div>)}
-          <CustomizedSwitches firstLabel="Log In" secondLabel="Create account" setIsNewUser={setIsNewUser} />
-          {isNewUser
-            ? <Button variant="contained" onClick={logIn}>LogIn</Button>
-            : <Button variant="contained" onClick={createAccount}>Create account</Button>}
-        </FormWrapper>
-      </Dialog>
       <Dialog onClose={handleClose} open={isDialogEndRoundOpen}>
         <Box sx={{
           p: 4,
@@ -303,6 +290,83 @@ const Header = () => {
           </Stack>
         </Box>
       </Dialog>
+
+      {/* Start  ---- FireBase login form */}
+      <Dialog
+        PaperProps={{
+          style: {
+            borderRadius: 30,
+          },
+        }}
+        onClose={handleClose}
+        open={isAuthDialogOpen}
+
+      >
+        <FormWrapper>
+          <Stack
+            spacing={2}
+            sx={{
+              p: 10,
+            }}
+          >
+            <TextField label="Почта" name="email" onChange={userDataOnChange} />
+            <TextField
+              name="password"
+              label="Пароль"
+              onChange={userDataOnChange}
+            />
+            {errors.map((error: string) => (
+              <div key={error}>
+                <Typography
+                  fontWeight={300}
+                  fontSize="0.8rem"
+                  sx={{
+                    color: theme.palette.error.main,
+                  }}
+                >
+                  *
+                  {error}
+                </Typography>
+              </div>
+            ))}
+            <CustomizedSwitches
+              firstLabel="Войти"
+              secondLabel="Зарегистрироваться"
+              setIsNewUser={setIsNewUser}
+              isNewUser={isNewUser}
+            />
+            {isNewUser
+              ? (
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  sx={{
+                    py: 2,
+                    fontWeight: 600,
+                  }}
+                  onClick={logIn}
+                >
+                  Войти
+                </Button>
+              )
+              : (
+                <Button
+                  color="secondary"
+
+                  sx={{
+                    py: 2,
+                    fontWeight: 600,
+                  }}
+                  variant="contained"
+                  onClick={createAccount}
+                >
+                  Зарегистрироваться
+                </Button>
+              )}
+          </Stack>
+        </FormWrapper>
+      </Dialog>
+      {/* End  ---- FireBase login form */}
     </Box>
   );
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useState } from 'react';
+import { Typography } from '@mui/material';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -55,19 +55,20 @@ interface ICustomizedSwitches {
   firstLabel: string;
   secondLabel: string;
   setIsNewUser: any;
+  isNewUser: boolean
 }
 
-const CustomizedSwitches = ({ firstLabel, secondLabel, setIsNewUser }: ICustomizedSwitches) => {
-  const [isSwitchOn, setIsSwitchOn] = useState(true);
+const CustomizedSwitches = ({
+  firstLabel, secondLabel, setIsNewUser, isNewUser,
+}: ICustomizedSwitches) => {
   const switchCheck = (event: any) => {
-    console.log(event.target.checked);
     setIsNewUser(event.target.checked);
-    setIsSwitchOn(event.target.checked);
   };
   return (
     <FormControlLabel
+      checked={isNewUser}
       control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={switchCheck} />}
-      label={isSwitchOn ? firstLabel : secondLabel}
+      label={<Typography fontSize="1rem">{isNewUser ? firstLabel : secondLabel}</Typography>}
     />
   );
 };

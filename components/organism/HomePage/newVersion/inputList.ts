@@ -127,7 +127,7 @@ export const inputList: InputList = {
   mainCostsField: [
     {
       label: 'Коэфф ЧП',
-      functionConst: 'PercentClearProfit',
+      functionConst: 'percentClearProfit',
       disabled: false,
       inputProps: '',
     },
@@ -516,7 +516,7 @@ export const COPY_INPUTS: any = [
     inputListSec: [
       {
         label: 'Коэфф ЧП',
-        functionConst: 'PercentClearProfit',
+        functionConst: 'percentClearProfit',
         disabled: false,
         inputProps: '',
       },
