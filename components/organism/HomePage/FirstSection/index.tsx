@@ -1,9 +1,6 @@
 'use client';
 
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box, Button, Dialog, DialogTitle, Grid, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -14,53 +11,11 @@ import { useAppDispatch } from '@/store';
 import { setEachPlayerData, DataOfUser } from '@/store/user/slice';
 import useAppSelector from '@/hooks/useAppSelector';
 import { getNormalNumber } from '@/helpers/utils/restyling';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { InputTitleWrapper, styleWithoutArrows } from './styles';
 
 const FirstSection = () => {
-  // const [inputValues, setInputValues] = useState({
-  //   round: 0,
-  //   savedNotes: [],
-  //   firstShows: '',
-  //   firstCv1: '',
-  //   firstApplications: '',
-  //   firstCv2: '',
-  //   firstSells: '',
-  //   firstBill: '',
-  //   firstRevenue: '',
-  //   firstSpends: '',
-  //   firstProfit: '',
-  //   sellShows: '',
-  //   sellCV1: '',
-  //   sellApplications: '',
-  //   sellCV2: '',
-  //   sellSells: '',
-  //   sellCV3: '',
-  //   sellConstClients: '',
-  //   sellTotalSells: '',
-  //   sellRegularPay: '0',
-  //   sellBill: '',
-  //   sellRevenue: '',
-  //   varSells: '',
-  //   varCosts: '',
-  //   varMarketing: '',
-  //   varTaxes: '',
-  //   varTotalPercent: '',
-  //   varTotalCosts: '',
-  //   constFotOwner: '',
-  //   constFot: '',
-  //   constCreditAll: '',
-  //   constCreditPay: '',
-  //   constTotalCosts: '',
-  //   mainCosts: '',
-  //   percentClearProfit: '1',
-  //   mainClearProfit: '',
-  //   mainMoneyFor: '',
-  //   mainPersonalCapital: '',
-  //   constAddField: '',
-  // });
-
   const [openDialog, setOpenDialog] = useState(false);
+  // const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [dialogValue, setDialogValue] = useState('');
   const [dialogAmount, setDialogAmount] = useState('');
   const [dialogNote, setDialogNote] = useState('');
@@ -77,13 +32,16 @@ const FirstSection = () => {
     };
 
     if (functionConst === 'nothing') {
-      disapatchCorrectValues = {
-        ...eachUserData,
-        firstShows: '',
-        firstCv1: '',
-        firstCv2: '',
-        firstBill: '',
-      };
+      const localEachUserData = window.localStorage.getItem('inputValues');
+      if (localEachUserData) {
+        disapatchCorrectValues = {
+          ...JSON.parse(localEachUserData as string),
+          firstShows: '',
+          firstCv1: '',
+          firstCv2: '',
+          firstBill: '',
+        };
+      }
     }
 
     // Constants <<< ----------------------------------------------------
@@ -150,30 +108,6 @@ const FirstSection = () => {
       constTotalCosts: totalCosts.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     };
 
-    // if (disapatchCorrectValues.round !== 0) {
-    //   inputValues.savedNotes.map((item: any) => {
-    //     if (item.whatHappened === 'Убавить') {
-    //       disapatchCorrectValues = {
-    //         ...disapatchCorrectValues,
-    //         // mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    //         mainMoneyFor: (mainMoneyFor - getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    //       };
-    //     }
-    //     if (item.whatHappened === 'Добавить') {
-    //       disapatchCorrectValues = {
-    //         ...disapatchCorrectValues,
-    //         // mainMoneyFor: (getNormalNumber(disapatchCorrectValues.mainMoneyFor) + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    //         mainMoneyFor: (mainMoneyFor + getNormalNumber(item.amount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    //       };
-    //     }
-    //     return neverFunc();
-    //   });
-    // }
-
-    // setInputValues(() => ({
-    //   ...disapatchCorrectValues,
-    // }));
-
     dispatch(setEachPlayerData({
       ...disapatchCorrectValues,
     }));
@@ -194,7 +128,6 @@ const FirstSection = () => {
     setOpenDialog(true);
   };
   const saveNote = () => {
-    // const moneyFor = inputValues.mainMoneyFor;
     const moneyFor = eachUserData.mainMoneyForAll;
     const newSaveNote: any = eachUserData.savedNotes;
     let totalMoney = 0;
@@ -212,12 +145,6 @@ const FirstSection = () => {
     if (dialogValue === 'Добавить') {
       totalMoney = getNormalNumber(moneyFor) + getNormalNumber(dialogAmount);
     }
-
-    // setInputValues((prev: any) => ({
-    //   ...prev,
-    //   savedNotes: [...newSaveNote, newSavedNoteValue],
-    //   mainMoneyFor: (Math.round(totalMoney)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-    // }));
     dispatch(setEachPlayerData({
       ...eachUserData,
       savedNotes: [...newSaveNote, newSavedNoteValue],
@@ -229,10 +156,6 @@ const FirstSection = () => {
 
   const addClientsRegularPay = (isIncrease: boolean) => {
     if (isIncrease) {
-      // setInputValues((prev: any) => ({
-      //   ...prev,
-      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) + 1),
-      // }));
       dispatch(setEachPlayerData({
         ...eachUserData,
         sellRegularPay: String(getNormalNumber(eachUserData.sellRegularPay) + 1),
@@ -244,10 +167,6 @@ const FirstSection = () => {
     }
 
     if (!isIncrease) {
-      // setInputValues((prev: any) => ({
-      //   ...prev,
-      //   sellRegularPay: String(getNormalNumber(inputValues.sellRegularPay) - 1),
-      // }));
       dispatch(setEachPlayerData({
         ...eachUserData,
         sellRegularPay: String(getNormalNumber(eachUserData.sellRegularPay) - 1),
@@ -256,7 +175,14 @@ const FirstSection = () => {
   };
 
   useEffect(() => {
+  // const localEachUserData = window.localStorage.getItem('inputValues');
+  // if (localEachUserData) {
+  //   dispatch(setEachPlayerData(JSON.parse(localEachUserData as string)));
+  // }
+    // if (!isFirstLoad) {
     textFieldOnChange('', 'nothing');
+    // }
+    // setIsFirstLoad(false);
   }, [eachUserData.round]);
 
   return (
@@ -496,8 +422,8 @@ const FirstSection = () => {
             <Button onClick={saveNote} variant="contained">{dialogValue}</Button>
           </Box>
         </Dialog>
-
       </Grid>
+      <div />
     </div>
   );
 };

@@ -65,7 +65,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
             <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
             <Button color={whatToShow === 'allRounds' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
           </Stack>
-          {whatToShow === 'articles' ? savedNotes.map((item: any) => (
+          {whatToShow === 'articles' ? savedNotes?.map((item: any) => (
             <List
               sx={{
                 display: 'flex',
@@ -94,7 +94,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
             </List>
           ))
           // TODO - add any interface props
-            : allRoundsData.map((itemRound: any) => (
+            : allRoundsData?.map((itemRound: any) => (
               <List
                 sx={{
                   justifyContent: 'space-between',

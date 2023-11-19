@@ -40,7 +40,7 @@ const Header = () => {
   const [isNewUser, setIsNewUser] = useState(true);
 
   const dispatch = useAppDispatch();
-  const { allRoundsData } = useAppSelector((state) => state.user);
+  // const { allRoundsData } = useAppSelector((state) => state.user);
   const eachUserData = useAppSelector((state) => state.user.data);
 
   const handleOnChange = (value: any, gameValue: string) => {
@@ -66,7 +66,7 @@ const Header = () => {
     if (localGameMainValues) {
       setGameMainValues(JSON.parse(localGameMainValues as string));
     }
-  }, []);
+  }, [eachUserData.round]);
 
   const getEachUserData = () => {
     setIsDialogEndRoundOpen(true);
@@ -77,6 +77,33 @@ const Header = () => {
     setIsDialogEndRoundOpen(false);
   };
 
+  const setDataToFire = async (dateCountRoundPayClients: any) => {
+    // const constantClients = getNormalNumber(eachUserData.sellConstClients);
+    // const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
+
+    // const dateCountRoundPayClients = {
+    //   ...eachUserData,
+    //   sellRegularPay: regularPayClients + constantClients,
+    //   round: eachUserData.round + 1,
+    //   date: new Date().toISOString(),
+    // };
+
+    // const newDateCountRoundPayClients = {
+    // ...dateCountRoundPayClients,
+    // allRoundsData: [...allRoundsData, dateCountRoundPayClients],
+    // };
+
+    try {
+      const docRef = await setDoc(doc(firebaseDb, 'users', userEmail as string), dateCountRoundPayClients);
+      console.log('Document written with ID: ', docRef);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
+  // Problem resolved - but need to check with tests
+  // Проблема в том что когда мы завершаем ход - у нас меняются клиенты которые платят регулярно и не пересчитываются
+  // Возможно нам необходимо брать значения из всех раундов - последний массив, а в качестве стартовых значений брать из data:
   const endRound = () => {
     const constantClients = getNormalNumber(eachUserData.sellConstClients);
     const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
@@ -100,6 +127,7 @@ const Header = () => {
     window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
+    // setDataToFire(dateCountRoundPayClients);
     handleClose();
   };
 
@@ -130,32 +158,8 @@ const Header = () => {
   };
 
   const logIn = () => {
-    signInWithEmailAndPassword(setErrors, userData, setUserEmail);
+    signInWithEmailAndPassword(setErrors, userData, setUserEmail, setIsAuthDialogOpen);
     handleCloseUserMenu();
-  };
-
-  const setDataToFire = async () => {
-    const constantClients = getNormalNumber(eachUserData.sellConstClients);
-    const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
-
-    const dateCountRoundPayClients = {
-      ...eachUserData,
-      sellRegularPay: regularPayClients + constantClients,
-      round: eachUserData.round + 1,
-      date: new Date().toISOString(),
-    };
-
-    const newDateCountRoundPayClients = {
-      ...dateCountRoundPayClients,
-      allRoundsData: [...allRoundsData, dateCountRoundPayClients],
-    };
-
-    try {
-      const docRef = await setDoc(doc(firebaseDb, 'users', userEmail as string), newDateCountRoundPayClients);
-      console.log('Document written with ID: ', docRef);
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
   };
 
   const handleLogOut = () => {
@@ -191,6 +195,15 @@ const Header = () => {
       backgroundColor: 'secondary.main',
     }}
     >
+      {/* <Button onClick={() => {
+        const localEachUserData = window.localStorage.getItem('inputValues');
+        console.log('inputValues', JSON.parse(localEachUserData as string));
+        console.log('eachUserData', eachUserData);
+      }}
+      >
+        show
+
+      </Button> */}
       <Button
         sx={{
           fontSize: '12px',

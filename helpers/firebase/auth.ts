@@ -38,7 +38,6 @@ const errorValidation = (errorCode: string) => {
 export const createUserWithEmailAndPassword = (setErrors: any, { email, password }: AuthProps) => {
   createUserWithEmailAndPasswordFirebase(auth, email, password)
     .then((userCredential: any) => {
-      // console.log(userCredential.user.accessToken);
       window.localStorage.setItem('accessToken', JSON.stringify(userCredential.user.accessToken));
       return userCredential;
     })
@@ -49,18 +48,18 @@ export const createUserWithEmailAndPassword = (setErrors: any, { email, password
     });
 };
 
-export const signInWithEmailAndPassword = (setErrors: any, { email, password }: AuthProps, setUserEmail?: any) => {
+export const signInWithEmailAndPassword = (setErrors: any, { email, password }: AuthProps, setUserEmail: any, setIsAuthDialogOpen: any) => {
   signInWithEmailAndPasswordFirebase(auth, email, password)
     .then((userCredential: any) => {
       console.log(userCredential.user);
       window.localStorage.setItem('accessToken', JSON.stringify(userCredential.user.accessToken));
-      if (setUserEmail) {
-        setUserEmail(userCredential.user.email);
-      }
+      setUserEmail(userCredential.user.email);
+      console.log('<< ========== Hm..');
+      setIsAuthDialogOpen(false);
       window.localStorage.setItem('userEmail', JSON.stringify(userCredential.user.email));
     })
     .catch((error) => {
-      // console.log(error.code, '<< ========== Check it');
+      console.log(error.code, '<< ========== Check it');
       const errors = errorValidation(error.code);
       setErrors(errors);
     });
