@@ -13,12 +13,16 @@ import {
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useRouter } from 'next/router';
 
 const AdminPage = () => {
   const [roomName, setRoomName] = useState('');
   const [allUsers, setAllUsers] = useState([]);
   const [savedUsers, setSavedUsers] = useState<any>([]);
   const [allUsersData, setAllUsersData] = useState<any>([]);
+
+  const router = useRouter();
 
   const createGameRoom = async (data: any) => {
     try {
@@ -69,13 +73,11 @@ const AdminPage = () => {
     try {
       const querySnapshot = await getDocs(collection(firebaseDb, 'users'));
       querySnapshot.forEach((docItem: any) => {
-        // console.log('docItem', docItem);
         usersData = [...usersData, {
           email: docItem.id,
           data: docItem.data(),
         }];
       });
-      console.log(usersData);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -83,6 +85,14 @@ const AdminPage = () => {
   };
   const [dialogCreateNew, setDialogCreateNew] = useState(false);
 
+  const backPrevPage = (e: any) => {
+    e.preventDefault();
+    router.push('/');
+  };
+
+  const handleSelectRoom = () => {
+
+  };
   return (
     <Box>
       <Stack
@@ -93,9 +103,14 @@ const AdminPage = () => {
           border: '1px solid black',
         }}
       >
+
+        <Button component="label" variant="contained" startIcon={<ArrowBackIosIcon />} onClick={backPrevPage}>
+          Назад
+        </Button>
         <Button variant="contained" onClick={() => setDialogCreateNew(true)}>Создать комнату</Button>
         <Button onClick={handleShowPlayerResults} variant="contained">Обновить результаты</Button>
       </Stack>
+      <Button onClick={handleSelectRoom}>Выбрать команту</Button>
 
       <Grid container>
         {

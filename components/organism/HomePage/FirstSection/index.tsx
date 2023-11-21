@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box, Button, Dialog, DialogTitle, Divider, Grid, Stack, TextField, Typography,
+  Box, Button, Dialog, DialogTitle, Divider, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import './style.scss';
@@ -19,7 +19,6 @@ import { InputTitleWrapper, styleWithoutArrows } from './styles';
 
 const FirstSection = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  // const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [dialogValue, setDialogValue] = useState('');
   const [dialogAmount, setDialogAmount] = useState('');
   const [dialogNote, setDialogNote] = useState('');
@@ -203,6 +202,7 @@ const FirstSection = () => {
             expanded={isFirstAccOpen}
             sx={{
               backgroundColor: 'rgba(57, 105, 125, 0.5)',
+              border: '1px solid white',
             }}
           >
             <AccordionSummary
@@ -237,7 +237,7 @@ const FirstSection = () => {
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
         <Stack
           sx={{
-            px: 6,
+            px: isMobileSize ? 0 : 6,
           }}
         >
           <Stack maxWidth={200}>
@@ -349,7 +349,7 @@ const FirstSection = () => {
               mb: 1,
             }}
           >
-            <Typography color="white" fontSize={15}>На счете</Typography>
+            <Typography color="white" fontSize={15}>Денег на р/с:</Typography>
             <Typography color="white" fontSize={15}>
               {eachUserData.mainMoneyForAll ? eachUserData.mainMoneyForAll : '0'}
             </Typography>

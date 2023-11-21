@@ -17,6 +17,7 @@ import {
   doc, setDoc,
 } from 'firebase/firestore';
 import theme from '@/helpers/ThemeProvider';
+import { useRouter } from 'next/router';
 import FormWrapper from '../AuthForm/style';
 import { IUserData } from '../AuthForm';
 
@@ -39,6 +40,7 @@ const Header = () => {
 
   const [errors, setErrors] = useState([]);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
+  // const router = useRouter();
 
   const dispatch = useAppDispatch();
   // const { allRoundsData } = useAppSelector((state) => state.user);
@@ -79,24 +81,8 @@ const Header = () => {
   };
 
   const setDataToFire = async (dateCountRoundPayClients: any) => {
-    // const constantClients = getNormalNumber(eachUserData.sellConstClients);
-    // const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
-
-    // const dateCountRoundPayClients = {
-    //   ...eachUserData,
-    //   sellRegularPay: regularPayClients + constantClients,
-    //   round: eachUserData.round + 1,
-    //   date: new Date().toISOString(),
-    // };
-
-    // const newDateCountRoundPayClients = {
-    // ...dateCountRoundPayClients,
-    // allRoundsData: [...allRoundsData, dateCountRoundPayClients],
-    // };
-
     try {
-      const docRef = await setDoc(doc(firebaseDb, 'users', userEmail as string), dateCountRoundPayClients);
-      console.log('Document written with ID: ', docRef);
+      await setDoc(doc(firebaseDb, 'users', userEmail as string), dateCountRoundPayClients);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -128,11 +114,13 @@ const Header = () => {
         date: new Date().toISOString(),
       })],
     };
+    console.log('dateCountRoundPayClients', dateCountRoundPayClients);
+
+    // TODO - Doesn't have free space in localStorage - resolve with firestore DB maybe
     window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
 
     dispatch(setEachPlayerData(dateCountRoundPayClients));
-    console.log(dateCountRoundPayClients);
-    setDataToFire(dateCountRoundPayClients);
+    // setDataToFire(dateCountRoundPayClients);
     handleClose();
   };
 
@@ -190,6 +178,11 @@ const Header = () => {
     label: 'Запрос на игру',
   }];
 
+  const goToAdminPage = (e: any) => {
+    e.preventDefault();
+    // router.push('/admin');
+  };
+
   return (
     <Box sx={{
       display: 'flex',
@@ -198,6 +191,7 @@ const Header = () => {
       width: '100%',
       p: 2,
       gap: 1,
+      height: '75px',
       backgroundColor: 'primary.main',
     }}
     >
@@ -265,13 +259,12 @@ const Header = () => {
                 </MenuItem>
                 {userEmail === 'admin@user.com'
                 && (
-                  <MenuItem>
+                  <MenuItem onClick={goToAdminPage}>
                     <Typography>Управление</Typography>
                   </MenuItem>
                 )}
               </>
             )}
-
         </Menu>
       </Box>
       <Dialog onClose={handleClose} open={isDialogEndRoundOpen}>
@@ -352,7 +345,6 @@ const Header = () => {
               : (
                 <Button
                   color="secondary"
-
                   sx={{
                     py: 2,
                     fontWeight: 600,

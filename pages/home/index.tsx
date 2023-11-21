@@ -8,8 +8,8 @@ import Header from '@/components/organism/Header';
 const HomePage = () => (
   <Box sx={{
     backgroundImage: 'url(/assets/bg/background.jpg)',
-    width: '100%',
-    height: '100vh',
+    backgroundSize: 'cover',
+    minHeight: '100vh',
   }}
   >
     <Stack>
@@ -17,7 +17,8 @@ const HomePage = () => (
         <Header />
       </Box>
       <Box sx={{
-        pt: 4,
+        pt: 1.5,
+        pb: 10,
       }}
       >
         <div>

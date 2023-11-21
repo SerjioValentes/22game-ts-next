@@ -217,7 +217,8 @@ const inputList = {
       inputProps: 'P',
     },
     {
-      label: 'Денег на Расч/Счет',
+      // label: 'Денег на Расч/Счет',
+      label: 'Прибыль хода',
       functionConst: 'mainMoneyFor',
       disabled: true,
       inputProps: 'P',
