@@ -1,31 +1,38 @@
 'use client';
 
 import React from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import FirstSection from '@/components/organism/HomePage/FirstSection';
 import Header from '@/components/organism/Header';
 
 const HomePage = () => (
   <Box sx={{
-    backgroundImage: 'url(/assets/bg/background.jpg)',
-    backgroundSize: 'cover',
     minHeight: '100vh',
+    display: 'inline-block',
+    minWidth: '100%',
+    backgroundSize: 'cover',
+    backgroundImage: 'url(/assets/bg/background.jpg)',
   }}
   >
-    <Stack>
-      <Box>
+    <div>
+      <div>
         <Header />
-      </Box>
+      </div>
       <Box sx={{
         pt: 1.5,
         pb: 10,
       }}
       >
-        <div>
+        <Box sx={{
+          px: 2,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+        >
           <FirstSection />
-        </div>
+        </Box>
       </Box>
-    </Stack>
+    </div>
   </Box>
 );
 export default HomePage;

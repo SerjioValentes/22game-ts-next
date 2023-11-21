@@ -189,11 +189,6 @@ const FirstSection = () => {
       <Stack
         direction={isMobileSize ? 'column' : 'row'}
         spacing={2}
-        sx={{
-          maxWidth: '1200px',
-          mx: 'auto',
-          px: 10,
-        }}
       >
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
         <Stack maxWidth={200}>
