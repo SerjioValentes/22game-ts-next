@@ -82,7 +82,6 @@ const HomePage = () => {
           }}
         >
           <TextField label="Почта" name="email" onChange={userDataOnChange} />
-
           <TextField
             name="password"
             label="Пароль"
