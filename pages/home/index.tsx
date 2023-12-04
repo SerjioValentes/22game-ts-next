@@ -78,10 +78,11 @@ const HomePage = () => {
         <Stack
           spacing={2}
           sx={{
-            p: 10,
+            p: 1,
           }}
         >
           <TextField label="Почта" name="email" onChange={userDataOnChange} />
+
           <TextField
             name="password"
             label="Пароль"
