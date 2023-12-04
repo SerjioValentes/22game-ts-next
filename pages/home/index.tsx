@@ -8,12 +8,9 @@ import FirstSection from '@/components/organism/HomePage/FirstSection';
 import Header from '@/components/organism/Header';
 import { firebaseDb } from '@/helpers/firebase/config';
 import { setAllRoundsData, setEachPlayerData, setMainUserInfo } from '@/store/user/slice';
-import {
-  getDocs, collection, getDoc, doc, getDocFromCache,
-} from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { useAppDispatch } from '@/store';
 import CustomizedSwitches from '@/components/atom/Switch';
-import FormWrapper from '@/components/organism/AuthForm/style';
 import theme from '@/helpers/ThemeProvider';
 import { IUserData } from '@/components/organism/AuthForm';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from '@/helpers/firebase/auth';
