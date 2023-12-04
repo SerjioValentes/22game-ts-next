@@ -21,6 +21,12 @@ const AdminPage = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [savedUsers, setSavedUsers] = useState<any>([]);
   const [allUsersData, setAllUsersData] = useState<any>([]);
+  const [tableData, setTableData] = useState<any>([]);
+  const [rooms, setRooms] = useState<any>([]);
+  const [rounds, setRounds] = useState<any>(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+
+  // Create new room dialog
+  const [dialogCreateNew, setDialogCreateNew] = useState(false);
 
   const router = useRouter();
 
@@ -37,30 +43,7 @@ const AdminPage = () => {
       usersAccess: savedUsers,
     };
     createGameRoom(roomData);
-  };
-
-  const getUsers = async () => {
-    const usersArray: any = [];
-    try {
-      const querySnapshot = await getDocs(collection(firebaseDb, 'users'));
-      console.log(querySnapshot);
-
-      // querySnapshot.forEach((docItem: any) => {
-      //   usersArray.push(docItem.id as string);
-      // });
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
-    setAllUsers(usersArray);
-  };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const handleSelectChange = (event: SelectChangeEvent) => {
-    const newSavedUsers = [...savedUsers, event.target.value];
-    setSavedUsers([...newSavedUsers]);
+    setDialogCreateNew(false);
   };
 
   const handlerDeleteUser = (item: string) => {
@@ -70,9 +53,11 @@ const AdminPage = () => {
 
   const handleShowPlayerResults = async () => {
     let usersData: any = [];
+    const usersArray: any = [];
     try {
       const querySnapshot = await getDocs(collection(firebaseDb, 'users'));
       querySnapshot.forEach((docItem: any) => {
+        usersArray.push(docItem.id as string);
         usersData = [...usersData, {
           email: docItem.id,
           data: docItem.data(),
@@ -81,18 +66,73 @@ const AdminPage = () => {
     } catch (e) {
       console.error('Error adding document: ', e);
     }
+    setAllUsers(usersArray);
     setAllUsersData(usersData);
+
+    let bigRound = 0;
+    usersData.map((item: any) => {
+      if (item?.data?.allRoundsData?.length > bigRound) {
+        bigRound = item.data.allRoundsData.length;
+        return bigRound;
+      }
+      return console.log('ok');
+    });
+    const roundsL = [];
+    for (let i = 0; i < bigRound; i += 1) {
+      roundsL.push(String(i + 1));
+    }
+    setRounds(roundsL);
   };
-  const [dialogCreateNew, setDialogCreateNew] = useState(false);
 
   const backPrevPage = (e: any) => {
     e.preventDefault();
     router.push('/');
   };
 
-  const handleSelectRoom = () => {
-
+  const getRoomsData = (roomNameL: string) => {
+    const room = rooms.filter((item: any) => item.roomName === roomNameL);
+    const newAllUsersData = allUsersData.filter((item: any) => room[0].usersAccess.includes(item.email));
+    setTableData(newAllUsersData);
   };
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    getRoomsData(event.target.value);
+    setRoomName(event.target.value);
+  };
+
+  const handleCreateRoomSelect = (event: SelectChangeEvent) => {
+    const newSavedUsers = [...savedUsers, event.target.value];
+    setSavedUsers([...newSavedUsers]);
+  };
+
+  const getRoomsNames = async () => {
+    let roomsL: any = [];
+    try {
+      const querySnapshot = await getDocs(collection(firebaseDb, 'rooms'));
+      querySnapshot.forEach((docItem: any) => {
+        roomsL = [...roomsL, docItem.data()];
+      });
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+    setRooms(roomsL);
+  };
+
+  useEffect(() => {
+    getRoomsNames();
+    handleShowPlayerResults();
+  }, []);
+
+  const handleRefreshResults = async () => {
+    // console.log(roomName);
+    // TODO - have to add state for e,terget.value select and after put this state to func bellow
+    if (!roomName) return;
+    getRoomsData(roomName);
+
+    getRoomsNames();
+    handleShowPlayerResults();
+  };
+
   return (
     <Box>
       <Stack
@@ -108,24 +148,61 @@ const AdminPage = () => {
           Назад
         </Button>
         <Button variant="contained" onClick={() => setDialogCreateNew(true)}>Создать комнату</Button>
-        <Button onClick={handleShowPlayerResults} variant="contained">Обновить результаты</Button>
+        {/* <Button
+          variant="contained"
+          onClick={() => {
+            console.log(tableData);
+          }}
+        >
+          show res
+
+        </Button> */}
+
+        <Box>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+            <InputLabel
+              sx={{
+                pt: 10,
+                pl: 2,
+              }}
+              id="select-label"
+            >
+              Выберете комнату
+
+            </InputLabel>
+            <Select
+              variant="outlined"
+              defaultValue="sd"
+              onChange={handleSelectChange}
+            >
+              {rooms && rooms.map((item: any) => (
+                <MenuItem
+                  key={item.roomName}
+                  value={item?.roomName}
+                >
+                  {item.roomName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button onClick={handleRefreshResults} variant="contained">Обновить результаты</Button>
       </Stack>
-      <Button onClick={handleSelectRoom}>Выбрать команту</Button>
 
       <Grid container>
         {
-           allUsersData.length > 0
+           tableData.length > 0
           && (
           <Grid item xs={1}>
             <Stack
-              spacing={4}
+              spacing={4.85}
               sx={{
                 pt: 4,
                 pl: 4,
               }}
             >
               <div>Ход</div>
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((item) => (
+              {rounds.map((item: string) => (
                 <Typography key={item} fontWeight={800}>{item}</Typography>
               ))}
             </Stack>
@@ -140,7 +217,7 @@ const AdminPage = () => {
               p: 4,
             }}
           >
-            {allUsersData && allUsersData.map((eachUser: any) => (
+            {tableData && tableData.map((eachUser: any) => (
               <Box
                 key={eachUser.email}
               >
@@ -158,7 +235,6 @@ const AdminPage = () => {
                           disabled
                           value={item.mainMoneyForAll}
                         />
-                        {/* <Button variant="contained" onClick={() => console.log(item)}>show</Button> */}
                       </Stack>
                     ))}
                   </Stack>
@@ -217,7 +293,7 @@ const AdminPage = () => {
                     id="select-label"
                     variant="outlined"
                     defaultValue="sd"
-                    onChange={handleSelectChange}
+                    onChange={handleCreateRoomSelect}
                   >
                     {allUsers && allUsers.map((item: any) => (
                       <MenuItem

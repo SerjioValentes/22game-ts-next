@@ -4,79 +4,48 @@ import RightMenuDrawer from '@/components/molecule/Drawer';
 import { getNormalNumber } from '@/helpers/utils/restyling';
 import useAppSelector from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/store';
-import { setEachPlayerData } from '@/store/user/slice';
+import { setAllRoundsData, setEachPlayerData, setMainUserInfo } from '@/store/user/slice';
 import {
   Avatar,
   Box, Button, Dialog, DialogTitle, IconButton, Menu, MenuItem, Stack, TextField, Tooltip, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@/helpers/firebase/auth';
-import CustomizedSwitches from '@/components/atom/Switch';
 import { firebaseDb } from '@/helpers/firebase/config';
 import {
   doc, setDoc,
 } from 'firebase/firestore';
-import theme from '@/helpers/ThemeProvider';
-import { useRouter } from 'next/router';
-import FormWrapper from '../AuthForm/style';
-import { IUserData } from '../AuthForm';
 
-const Header = () => {
+const Header = ({ setIsUserLogged }: any) => {
   const [isDialogEndRoundOpen, setIsDialogEndRoundOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<null | string | undefined>(null);
-  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
-  const [gameMainValues, setGameMainValues] = useState({
-    name: '',
-    bussiness: '',
-    gamePlan: '',
-    gameRequest: '',
-  });
-
-  const [userData, setUserData] = useState<IUserData>({
-    email: '',
-    password: '',
-  });
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const [errors, setErrors] = useState([]);
-  const [isNewUser, setIsNewUser] = useState<boolean>(false);
-  // const router = useRouter();
-
   const dispatch = useAppDispatch();
-  // const { allRoundsData } = useAppSelector((state) => state.user);
+  const { allRoundsData, mainUserInfo } = useAppSelector((state) => state.user);
   const eachUserData = useAppSelector((state) => state.user.data);
 
   const handleOnChange = (value: any, gameValue: string) => {
-    setGameMainValues((prev: any) => ({
-      ...prev,
+    dispatch(setMainUserInfo({
+      ...mainUserInfo,
       [gameValue]: value.target.value,
     }));
 
     window.localStorage.setItem('gameMainValues', JSON.stringify({
-      ...gameMainValues,
+      ...mainUserInfo,
       [gameValue]: value.target.value,
     }));
   };
 
   useEffect(() => {
-    const localEachUserData = window.localStorage.getItem('inputValues');
-    const localGameMainValues = window.localStorage.getItem('gameMainValues');
     const localUserEmail = window.localStorage.getItem('userEmail');
     setUserEmail(JSON.parse(localUserEmail as string));
-    if (localEachUserData) {
-      dispatch(setEachPlayerData(JSON.parse(localEachUserData as string)));
-    }
-    if (localGameMainValues) {
-      setGameMainValues(JSON.parse(localGameMainValues as string));
-    }
-  }, [eachUserData.round]);
+  }, []);
 
   const getEachUserData = () => {
     setIsDialogEndRoundOpen(true);
   };
 
   const handleClose = () => {
-    setIsAuthDialogOpen(false);
     setIsDialogEndRoundOpen(false);
   };
 
@@ -88,39 +57,36 @@ const Header = () => {
     }
   };
 
-  // Problem resolved - but need to check with tests
-  // Проблема в том что когда мы завершаем ход - у нас меняются клиенты которые платят регулярно и не пересчитываются
-  // Возможно нам необходимо брать значения из всех раундов - последний массив, а в качестве стартовых значений брать из data:
   const endRound = () => {
     const constantClients = getNormalNumber(eachUserData.sellConstClients);
     const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
     const mainMoneyForAll = getNormalNumber(eachUserData.mainMoneyForAll);
     const mainMoneyFor = getNormalNumber(eachUserData.mainMoneyFor);
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // TODO - AllRounds data will add again in each round !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    const dateCountRoundPayClients = {
+    const eachUser = {
       ...eachUserData,
       sellRegularPay: String(regularPayClients + constantClients),
       mainMoneyForAll: (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
       round: eachUserData.round + 1,
       date: new Date().toISOString(),
-      allRoundsData: [...eachUserData.allRoundsData, ({
-        ...eachUserData,
-        sellRegularPay: String(regularPayClients + constantClients),
-        mainMoneyForAll: (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-        round: eachUserData.round + 1,
-        date: new Date().toISOString(),
-      })],
     };
-    console.log('dateCountRoundPayClients', dateCountRoundPayClients);
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TODO - AllRounds data will add again in each round !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    const allRoundsDataL = [...allRoundsData, eachUser];
+    // ...eachUserData,
 
     // TODO - Doesn't have free space in localStorage - resolve with firestore DB maybe
-    window.localStorage.setItem('inputValues', JSON.stringify(dateCountRoundPayClients));
+    window.localStorage.setItem('inputValues', JSON.stringify(eachUser));
 
-    dispatch(setEachPlayerData(dateCountRoundPayClients));
-    // setDataToFire(dateCountRoundPayClients);
+    dispatch(setEachPlayerData(eachUser));
+    dispatch(setAllRoundsData(allRoundsDataL));
+    setDataToFire({
+      data: eachUser,
+      allRoundsData: allRoundsDataL,
+      mainUserInfo,
+    });
     handleClose();
   };
 
@@ -132,33 +98,14 @@ const Header = () => {
     setAnchorElUser(null);
   };
   const handleLogInUser = () => {
-    setIsAuthDialogOpen(true);
     setAnchorElUser(null);
     // setIsNewUser(false);
   };
 
-  const userDataOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-
-    setUserData((prev: IUserData) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const createAccount = () => {
-    createUserWithEmailAndPassword(setErrors, userData);
-    handleCloseUserMenu();
-  };
-
-  const logIn = () => {
-    signInWithEmailAndPassword(setErrors, userData, setUserEmail, setIsAuthDialogOpen);
-    handleCloseUserMenu();
-  };
-
   const handleLogOut = () => {
-    localStorage.clear();
     setUserEmail(null);
+    localStorage.clear();
+    setIsUserLogged('notlogged');
   };
 
   const headerInputs = [{
@@ -207,9 +154,6 @@ const Header = () => {
         {eachUserData.round === 0 ? 'Начать игру' : 'Завершить'}
       </Button>
 
-      <RightMenuDrawer
-        savedNotes={eachUserData.savedNotes}
-      />
       {headerInputs.map((item: any) => (
         <TextField
           key={item.label}
@@ -219,11 +163,13 @@ const Header = () => {
             },
           }}
           label={item.label}
-          value={gameMainValues[item.name as keyof typeof gameMainValues]}
+          value={mainUserInfo[item.name as keyof typeof mainUserInfo]}
           onChange={(e: any) => handleOnChange(e, item.name)}
         />
       ))}
-
+      <RightMenuDrawer
+        savedNotes={eachUserData.savedNotes}
+      />
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Настройки профиля">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -232,7 +178,6 @@ const Header = () => {
         </Tooltip>
         <Menu
           sx={{ mt: '45px' }}
-          id="menu-appbar"
           anchorEl={anchorElUser}
           anchorOrigin={{
             vertical: 'top',
@@ -283,82 +228,6 @@ const Header = () => {
           </Stack>
         </Box>
       </Dialog>
-
-      {/* Start  ---- FireBase login form */}
-      <Dialog
-        PaperProps={{
-          style: {
-            borderRadius: 30,
-          },
-        }}
-        onClose={handleClose}
-        open={isAuthDialogOpen}
-
-      >
-        <FormWrapper>
-          <Stack
-            spacing={2}
-            sx={{
-              p: 10,
-            }}
-          >
-            <TextField label="Почта" name="email" onChange={userDataOnChange} />
-            <TextField
-              name="password"
-              label="Пароль"
-              onChange={userDataOnChange}
-            />
-            {errors.map((error: string) => (
-              <div key={error}>
-                <Typography
-                  fontWeight={300}
-                  fontSize="0.8rem"
-                  sx={{
-                    color: theme.palette.error.main,
-                  }}
-                >
-                  *
-                  {error}
-                </Typography>
-              </div>
-            ))}
-            <CustomizedSwitches
-              firstLabel="Войти"
-              secondLabel="Зарегистрироваться"
-              setIsNewUser={setIsNewUser}
-              isNewUser={isNewUser}
-            />
-            {isNewUser
-              ? (
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  sx={{
-                    py: 2,
-                    fontWeight: 600,
-                  }}
-                  onClick={logIn}
-                >
-                  Войти
-                </Button>
-              )
-              : (
-                <Button
-                  color="secondary"
-                  sx={{
-                    py: 2,
-                    fontWeight: 600,
-                  }}
-                  variant="contained"
-                  onClick={createAccount}
-                >
-                  Зарегистрироваться
-                </Button>
-              )}
-          </Stack>
-        </FormWrapper>
-      </Dialog>
-      {/* End  ---- FireBase login form */}
     </Box>
   );
 };

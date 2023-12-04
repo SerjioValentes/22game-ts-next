@@ -4,11 +4,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface DataOfUser {
   round: number,
+  date: string,
   firstShows: string,
   firstCv1: string,
   savedNotes: [],
   // TODO - Нужно как то выпилисть из БД - Создается еще оди экземпляр пустойц
-  allRoundsData: [],
+  // allRoundsData: [],
   // TODO - Нужно как то выпилисть из БД - Создается еще оди экземпляр пустойц
   firstApplications: string,
   firstCv2: string,
@@ -52,14 +53,27 @@ interface UserInitialState {
   data: DataOfUser,
   savedNotes: any,
   allRoundsData: any,
+  mainUserInfo: {
+    name: string,
+    bussiness: string,
+    gamePlan: string,
+    gameRequest: string,
+  },
 }
 
 const initialState: UserInitialState = {
   savedNotes: [],
   allRoundsData: [],
+  mainUserInfo: {
+    name: '',
+    bussiness: '',
+    gamePlan: '',
+    gameRequest: '',
+  },
   data: {
     round: 0,
-    allRoundsData: [],
+    date: '',
+    // allRoundsData: [],
     savedNotes: [],
     firstShows: '',
     firstCv1: '',
@@ -116,7 +130,12 @@ export const userSlice = createSlice({
     setSavedNotes(state, action) {
       state.savedNotes = action.payload;
     },
+    setMainUserInfo(state, action) {
+      state.mainUserInfo = action.payload;
+    },
   },
 });
-export const { setEachPlayerData, setAllRoundsData, setSavedNotes } = userSlice.actions;
+export const {
+  setEachPlayerData, setAllRoundsData, setSavedNotes, setMainUserInfo,
+} = userSlice.actions;
 export default userSlice.reducer;

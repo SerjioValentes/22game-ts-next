@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+// import { initializeFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig: any = {
@@ -15,6 +16,10 @@ const firebaseConfig: any = {
 
 export const firebaseInitApp = initializeApp(firebaseConfig);
 
+export const auth = getAuth(firebaseInitApp);
+
 export const firebaseDb = getFirestore(firebaseInitApp);
 
-export const auth = getAuth(firebaseInitApp);
+// export const firebaseDb = initializeFirestore(firebaseInitApp, {
+//   experimentalForceLongPolling: true,
+// });

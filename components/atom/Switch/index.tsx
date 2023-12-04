@@ -67,7 +67,7 @@ const CustomizedSwitches = ({
   return (
     <FormControlLabel
       checked={isNewUser}
-      control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={switchCheck} />}
+      control={<MaterialUISwitch sx={{ m: 1 }} onChange={switchCheck} />}
       label={<Typography fontSize="1rem">{isNewUser ? firstLabel : secondLabel}</Typography>}
     />
   );

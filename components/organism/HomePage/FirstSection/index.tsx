@@ -37,16 +37,16 @@ const FirstSection = () => {
     };
 
     if (functionConst === 'nothing') {
-      const localEachUserData = window.localStorage.getItem('inputValues');
-      if (localEachUserData) {
-        disapatchCorrectValues = {
-          ...JSON.parse(localEachUserData as string),
-          firstShows: '',
-          firstCv1: '',
-          firstCv2: '',
-          firstBill: '',
-        };
-      }
+      // const localEachUserData = window.localStorage.getItem('inputValues');
+      // if (localEachUserData) {
+      disapatchCorrectValues = {
+        ...eachUserData,
+        firstShows: '',
+        firstCv1: '',
+        firstCv2: '',
+        firstBill: '',
+      };
+      // }
     }
 
     // Constants <<< ----------------------------------------------------
@@ -183,6 +183,10 @@ const FirstSection = () => {
   useEffect(() => {
     textFieldOnChange('', 'nothing');
   }, [eachUserData.round]);
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <Stack>

@@ -13,7 +13,7 @@ import useAppSelector from '@/hooks/useAppSelector';
 export default function RightMenuDrawer({ savedNotes }: any) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [whatToShow, setWhatToShow] = useState('articles');
-  const { allRoundsData } = useAppSelector((state) => state.user.data);
+  const { allRoundsData } = useAppSelector((state) => state.user);
   // const dispatch = useAppDispatch();
 
   const openDrawer = () => {
@@ -55,13 +55,6 @@ export default function RightMenuDrawer({ savedNotes }: any) {
               p: 2,
             }}
           >
-            {/* <Button onClick={() => {
-              console.log(allRoundsData);
-            }}
-            >
-              show
-
-            </Button> */}
             <Button color={whatToShow === 'allRounds' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('articles')}>Записи расходов</Button>
             <Button color={whatToShow === 'articles' ? 'primary' : 'secondary'} variant="contained" fullWidth onClick={() => changeData('allRounds')}>Все ходы</Button>
           </Stack>
@@ -85,7 +78,9 @@ export default function RightMenuDrawer({ savedNotes }: any) {
                 }}
                 >
                   {item.whatHappened === 'Убавить' ? '-' : '+'}
-                  {item.amount}
+                  {item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+                  {' '}
+                  P
                 </ListItem>
                 <ListItem>
                   {item.note}
@@ -93,7 +88,7 @@ export default function RightMenuDrawer({ savedNotes }: any) {
               </Box>
             </List>
           ))
-          // TODO - add any interface props
+          // TODO - types
             : allRoundsData?.map((itemRound: any) => (
               <List
                 sx={{
