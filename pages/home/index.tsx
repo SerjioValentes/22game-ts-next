@@ -101,6 +101,7 @@ const HomePage = () => {
               </Typography>
             </div>
           ))}
+
           <CustomizedSwitches
             firstLabel="Войти"
             secondLabel="Зарегистрироваться"
