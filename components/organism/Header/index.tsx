@@ -103,6 +103,60 @@ const Header = ({ setIsUserLogged }: any) => {
   };
 
   const handleLogOut = () => {
+    const resetMainInfo = {
+      mainUserInfo: {
+        name: '',
+        bussiness: '',
+        gamePlan: '',
+        gameRequest: '',
+      },
+    };
+    const resetEachPlayer = {
+      round: 0,
+      date: '',
+      savedNotes: [],
+      firstShows: '',
+      firstCv1: '',
+      firstApplications: '',
+      firstCv2: '',
+      firstSells: '',
+      firstBill: '',
+      firstRevenue: '',
+      firstSpends: '',
+      firstProfit: '',
+      sellShows: '',
+      sellCV1: '',
+      sellApplications: '',
+      sellCV2: '',
+      sellSells: '',
+      sellCV3: '',
+      sellConstClients: '',
+      sellTotalSells: '',
+      sellRegularPay: '0',
+      sellBill: '',
+      sellRevenue: '',
+      varSells: '',
+      varCosts: '',
+      varMarketing: '',
+      varTaxes: '',
+      varTotalPercent: '',
+      varTotalCosts: '',
+      constFotOwner: '',
+      constFot: '',
+      constCreditAll: '',
+      constCreditPay: '',
+      constTotalCosts: '',
+      mainCosts: '',
+      percentClearProfit: '1',
+      mainClearProfit: '',
+      mainMoneyFor: '',
+      mainMoneyForAll: '',
+      mainPersonalCapital: '',
+      constAddField: '',
+      nothing: '',
+    };
+    dispatch(setMainUserInfo(resetMainInfo));
+    dispatch(setEachPlayerData(resetEachPlayer));
     setUserEmail(null);
     localStorage.clear();
     setIsUserLogged('notlogged');
@@ -151,7 +205,7 @@ const Header = ({ setIsUserLogged }: any) => {
         variant="contained"
         onClick={getEachUserData}
       >
-        {eachUserData.round === 0 ? 'Начать игру' : 'Завершить'}
+        {eachUserData?.round === 0 ? 'Начать игру' : 'Завершить'}
       </Button>
 
       {headerInputs.map((item: any) => (
@@ -163,17 +217,17 @@ const Header = ({ setIsUserLogged }: any) => {
             },
           }}
           label={item.label}
-          value={mainUserInfo[item.name as keyof typeof mainUserInfo]}
+          value={mainUserInfo && mainUserInfo[item.name as keyof typeof mainUserInfo]}
           onChange={(e: any) => handleOnChange(e, item.name)}
         />
       ))}
       <RightMenuDrawer
-        savedNotes={eachUserData.savedNotes}
+        savedNotes={eachUserData?.savedNotes}
       />
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Настройки профиля">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar>{eachUserData.round}</Avatar>
+            <Avatar>{eachUserData?.round}</Avatar>
           </IconButton>
         </Tooltip>
         <Menu

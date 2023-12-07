@@ -43,10 +43,11 @@ const HomePage = () => {
         dispatch(setMainUserInfo(mainUserInfo));
         setIsUserLogged('logged');
       } else {
-        setIsUserLogged('notlogged');
+        setIsUserLogged('logged');
         console.log('No such document!');
       }
     } else {
+      // console.log('No such document!');
       setIsUserLogged('notlogged');
     }
   };

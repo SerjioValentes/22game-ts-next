@@ -27,6 +27,7 @@ const FirstSection = () => {
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
+  // const savedNotes: any = useAppSelector((state) => state.user.savedNotes);
   const isMobileSize = useWindowSize();
   // const neverFunc = () => {};
 
@@ -184,10 +185,6 @@ const FirstSection = () => {
     textFieldOnChange('', 'nothing');
   }, [eachUserData.round]);
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <Stack>
       <Stack
@@ -221,7 +218,7 @@ const FirstSection = () => {
                     key={item.functionConst}
                     sx={styleWithoutArrows}
                     disabled={item.disabled}
-                    value={eachUserData[item.functionConst as keyof DataOfUser]}
+                    value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
                     label={item.label}
                     onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
                   />
@@ -249,7 +246,7 @@ const FirstSection = () => {
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 label={item.label}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
@@ -260,7 +257,7 @@ const FirstSection = () => {
                 sx={styleWithoutArrows}
                 disabled={item.disabled}
                 label={item.label}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
@@ -301,7 +298,7 @@ const FirstSection = () => {
                 sx={styleWithoutArrows}
                 label={item.label}
                 disabled={item.disabled}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
@@ -322,7 +319,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               disabled={item.disabled}
               label={item.label}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
+              value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}
@@ -335,7 +332,7 @@ const FirstSection = () => {
                 sx={styleWithoutArrows}
                 label={item.label}
                 disabled={item.disabled}
-                value={eachUserData[item.functionConst as keyof DataOfUser]}
+                value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
                 onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
               />
             ))}
@@ -350,7 +347,7 @@ const FirstSection = () => {
           >
             <Typography color="white" fontSize={15}>Денег на р/с:</Typography>
             <Typography color="white" fontSize={15}>
-              {eachUserData.mainMoneyForAll ? eachUserData.mainMoneyForAll : '0'}
+              {eachUserData?.mainMoneyForAll ? eachUserData.mainMoneyForAll : '0'}
             </Typography>
           </Stack>
           {/* Start ---------------- ДОБАВИТЬ/УБАВИТЬ - переменные расходы --------------- Start */}
@@ -398,7 +395,7 @@ const FirstSection = () => {
               sx={styleWithoutArrows}
               label={item.label}
               disabled={item.disabled}
-              value={eachUserData[item.functionConst as keyof DataOfUser]}
+              value={eachUserData && eachUserData[item.functionConst as keyof DataOfUser]}
               onChange={(e) => textFieldOnChange(e.target.value, item.functionConst)}
             />
           ))}

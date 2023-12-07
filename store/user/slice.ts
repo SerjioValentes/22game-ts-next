@@ -73,7 +73,6 @@ const initialState: UserInitialState = {
   data: {
     round: 0,
     date: '',
-    // allRoundsData: [],
     savedNotes: [],
     firstShows: '',
     firstCv1: '',
@@ -133,6 +132,7 @@ export const userSlice = createSlice({
     setMainUserInfo(state, action) {
       state.mainUserInfo = action.payload;
     },
+
   },
 });
 export const {
