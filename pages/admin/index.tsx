@@ -15,6 +15,10 @@ import React, { useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useRouter } from 'next/router';
+// import { ResponsiveLine } from '@nivo/line';
+import dynamic from 'next/dynamic';
+
+const ResponsiveLine = dynamic(() => import('@nivo/line').then((m) => m.ResponsiveLine), { ssr: false });
 
 const AdminPage = () => {
   const [roomName, setRoomName] = useState('');
@@ -25,11 +29,320 @@ const AdminPage = () => {
   const [rooms, setRooms] = useState<any>([]);
   const [rounds, setRounds] = useState<any>(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
 
+  const [chartData, setChartData] = useState<any>([]);
   // Create new room dialog
   const [dialogCreateNew, setDialogCreateNew] = useState(false);
 
   const router = useRouter();
+  const HELPER_VAR = [
+    {
+      id: 'japan',
+      color: 'hsl(35, 70%, 50%)',
+      data: [
+        {
+          x: 'plane',
+          y: 15,
+        },
+        {
+          x: 'helicopter',
+          y: 80,
+        },
+        {
+          x: 'boat',
+          y: 32,
+        },
+        {
+          x: 'train',
+          y: 256,
+        },
+        {
+          x: 'subway',
+          y: 114,
+        },
+        {
+          x: 'bus',
+          y: 127,
+        },
+        {
+          x: 'car',
+          y: 42,
+        },
+        {
+          x: 'moto',
+          y: 185,
+        },
+        {
+          x: 'bicycle',
+          y: 72,
+        },
+        {
+          x: 'horse',
+          y: 43,
+        },
+        {
+          x: 'skateboard',
+          y: 28,
+        },
+        {
+          x: 'others',
+          y: 282,
+        },
+      ],
+    },
+    {
+      id: 'france',
+      color: 'hsl(221, 70%, 50%)',
+      data: [
+        {
+          x: 'plane',
+          y: 198,
+        },
+        {
+          x: 'helicopter',
+          y: 187,
+        },
+        {
+          x: 'boat',
+          y: 55,
+        },
+        {
+          x: 'train',
+          y: 134,
+        },
+        {
+          x: 'subway',
+          y: 167,
+        },
+        {
+          x: 'bus',
+          y: 222,
+        },
+        {
+          x: 'car',
+          y: 129,
+        },
+        {
+          x: 'moto',
+          y: 8,
+        },
+        {
+          x: 'bicycle',
+          y: 286,
+        },
+        {
+          x: 'horse',
+          y: 113,
+        },
+        {
+          x: 'skateboard',
+          y: 148,
+        },
+        {
+          x: 'others',
+          y: 211,
+        },
+      ],
+    },
+    {
+      id: 'us',
+      color: 'hsl(259, 70%, 50%)',
+      data: [
+        {
+          x: 'plane',
+          y: 130,
+        },
+        {
+          x: 'helicopter',
+          y: 172,
+        },
+        {
+          x: 'boat',
+          y: 96,
+        },
+        {
+          x: 'train',
+          y: 158,
+        },
+        {
+          x: 'subway',
+          y: 191,
+        },
+        {
+          x: 'bus',
+          y: 30,
+        },
+        {
+          x: 'car',
+          y: 37,
+        },
+        {
+          x: 'moto',
+          y: 290,
+        },
+        {
+          x: 'bicycle',
+          y: 44,
+        },
+        {
+          x: 'horse',
+          y: 86,
+        },
+        {
+          x: 'skateboard',
+          y: 108,
+        },
+        {
+          x: 'others',
+          y: 153,
+        },
+      ],
+    },
+    {
+      id: 'germany',
+      color: 'hsl(203, 70%, 50%)',
+      data: [
+        {
+          x: 'plane',
+          y: 88,
+        },
+        {
+          x: 'helicopter',
+          y: 107,
+        },
+        {
+          x: 'boat',
+          y: 59,
+        },
+        {
+          x: 'train',
+          y: 198,
+        },
+        {
+          x: 'subway',
+          y: 195,
+        },
+        {
+          x: 'bus',
+          y: 119,
+        },
+        {
+          x: 'car',
+          y: 5,
+        },
+        {
+          x: 'moto',
+          y: 136,
+        },
+        {
+          x: 'bicycle',
+          y: 166,
+        },
+        {
+          x: 'horse',
+          y: 226,
+        },
+        {
+          x: 'skateboard',
+          y: 124,
+        },
+        {
+          x: 'others',
+          y: 177,
+        },
+      ],
+    },
+    {
+      id: 'norway',
+      color: 'hsl(207, 70%, 50%)',
+      data: [
+        {
+          x: 'plane',
+          y: 246,
+        },
+        {
+          x: 'helicopter',
+          y: 269,
+        },
+        {
+          x: 'boat',
+          y: 50,
+        },
+        {
+          x: 'train',
+          y: 42,
+        },
+        {
+          x: 'subway',
+          y: 43,
+        },
+        {
+          x: 'bus',
+          y: 120,
+        },
+        {
+          x: 'car',
+          y: 85,
+        },
+        {
+          x: 'moto',
+          y: 275,
+        },
+        {
+          x: 'bicycle',
+          y: 10,
+        },
+        {
+          x: 'horse',
+          y: 206,
+        },
+        {
+          x: 'skateboard',
+          y: 276,
+        },
+        {
+          x: 'others',
+          y: 59,
+        },
+      ],
+    },
+  ];
+  const getChart = (data: any) => {
+    let HELPER = {
+      id: 'email',
+      color: 'hsl(2, 10%, 40%)',
+      data: [
+        {
+          x: 0,
+          y: 0, // how much his win
+        },
+      ],
+    };
 
+    const result: any = [];
+
+    data.map((eachUserM: any, i: any) => {
+      HELPER = {
+        ...HELPER,
+        id: eachUserM.email,
+        color: `hsl(${i}, 10%, 40%)`,
+      };
+      eachUserM.data.allRoundsData.map((round: any) => {
+        HELPER = {
+          ...HELPER,
+          data: [
+            ...HELPER.data,
+            {
+              x: round.round,
+              y: Number(round.mainMoneyForAll.replaceAll(' ', '')),
+            },
+          ],
+        };
+      });
+      result.push(HELPER);
+    });
+    setChartData(result);
+    console.log(result);
+  };
   const createGameRoom = async (data: any) => {
     try {
       await setDoc(doc(firebaseDb, 'rooms', roomName), data);
@@ -68,6 +381,7 @@ const AdminPage = () => {
     }
     setAllUsers(usersArray);
     setAllUsersData(usersData);
+    getChart(usersData);
 
     let bigRound = 0;
     usersData.map((item: any) => {
@@ -148,15 +462,15 @@ const AdminPage = () => {
           Назад
         </Button>
         <Button variant="contained" onClick={() => setDialogCreateNew(true)}>Создать комнату</Button>
-        {/* <Button
+        <Button
           variant="contained"
+          // onClick={getChart}
           onClick={() => {
-            console.log(tableData);
+            console.log(HELPER_VAR);
           }}
         >
-          show res
-
-        </Button> */}
+          showRes
+        </Button>
 
         <Box>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
@@ -188,6 +502,79 @@ const AdminPage = () => {
         </Box>
         <Button onClick={handleRefreshResults} variant="contained">Обновить результаты</Button>
       </Stack>
+
+      <Box sx={{
+        p: 4,
+        height: ' 700px',
+      }}
+      >
+        Chart
+        <ResponsiveLine
+          data={chartData}
+          margin={{
+            top: 50, right: 110, bottom: 50, left: 60,
+          }}
+          xScale={{ type: 'point' }}
+          yScale={{
+            type: 'linear',
+            min: 'auto',
+            max: 'auto',
+            stacked: true,
+            reverse: false,
+          }}
+          yFormat=" >-.2f"
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            // legend: 'transportation',
+            legendOffset: 36,
+            legendPosition: 'middle',
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            // legend: 'count',
+            legendOffset: -40,
+            legendPosition: 'middle',
+          }}
+          pointSize={10}
+          pointColor={{ theme: 'background' }}
+          pointBorderWidth={2}
+          pointBorderColor={{ from: 'serieColor' }}
+          pointLabelYOffset={-12}
+          useMesh
+          legends={[
+            {
+              anchor: 'bottom-right',
+              direction: 'column',
+              justify: false,
+              translateX: 100,
+              translateY: 0,
+              itemsSpacing: 0,
+              itemDirection: 'left-to-right',
+              itemWidth: 80,
+              itemHeight: 20,
+              itemOpacity: 0.75,
+              symbolSize: 12,
+              symbolShape: 'circle',
+              symbolBorderColor: 'rgba(0, 0, 0, .5)',
+              effects: [
+                {
+                  on: 'hover',
+                  style: {
+                    itemBackground: 'rgba(0, 0, 0, .03)',
+                    itemOpacity: 1,
+                  },
+                },
+              ],
+            },
+          ]}
+        />
+      </Box>
 
       <Grid container>
         {
