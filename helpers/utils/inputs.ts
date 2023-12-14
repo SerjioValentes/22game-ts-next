@@ -7,7 +7,7 @@ const inputList = {
       inputProps: '',
     },
     {
-      label: 'CV1',
+      label: 'Конверсия CV1',
       functionConst: 'firstCv1',
       disabled: false,
       inputProps: '%',
@@ -19,7 +19,7 @@ const inputList = {
       inputProps: '',
     },
     {
-      label: 'CV2',
+      label: 'Конверсия CV2',
       functionConst: 'firstCv2',
       disabled: false,
       inputProps: '%',
@@ -63,7 +63,7 @@ const inputList = {
       inputProps: '',
     },
     {
-      label: 'CV1',
+      label: 'Конверсия CV1',
       functionConst: 'sellCV1',
       disabled: false,
       inputProps: '%',
@@ -75,7 +75,7 @@ const inputList = {
       inputProps: '',
     },
     {
-      label: 'CV2',
+      label: 'Конверсия CV2',
       functionConst: 'sellCV2',
       disabled: false,
       inputProps: '%',
@@ -89,7 +89,7 @@ const inputList = {
   ],
   sellFunnel_02: [
     {
-      label: 'CV3',
+      label: 'Конверсия CV3',
       functionConst: 'sellCV3',
       disabled: false,
       inputProps: '%',

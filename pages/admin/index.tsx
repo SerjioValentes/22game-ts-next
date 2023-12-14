@@ -108,6 +108,9 @@ const AdminPage = () => {
   const getRoomsNames = async () => {
     let roomsL: any = [];
     try {
+      // TODO - have to use like this
+      // const docRef = doc(firebaseDb, 'users', LUserEmail);
+      // const docSnap = await getDoc(docRef);
       const querySnapshot = await getDocs(collection(firebaseDb, 'rooms'));
       querySnapshot.forEach((docItem: any) => {
         roomsL = [...roomsL, docItem.data()];
@@ -148,31 +151,23 @@ const AdminPage = () => {
           Назад
         </Button>
         <Button variant="contained" onClick={() => setDialogCreateNew(true)}>Создать комнату</Button>
-        {/* <Button
-          variant="contained"
-          onClick={() => {
-            console.log(tableData);
-          }}
-        >
-          show res
-
-        </Button> */}
-
         <Box>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
             <InputLabel
               sx={{
-                pt: 10,
-                pl: 2,
+                fontWeight: 'bold',
+                fontSize: '0.7rem',
+                // pt: 10,
+                pl: 1,
               }}
               id="select-label"
             >
               Выберете комнату
-
             </InputLabel>
             <Select
+              labelId="select-label"
               variant="outlined"
-              defaultValue="sd"
+              defaultValue=""
               onChange={handleSelectChange}
             >
               {rooms && rooms.map((item: any) => (
@@ -226,14 +221,15 @@ const AdminPage = () => {
                     {eachUser.email}
                   </Typography>
                   <Stack spacing={1}>
-                    {eachUser.data.allRoundsData.map((item: any) => (
+                    {eachUser.data.allRoundsData && eachUser.data.allRoundsData.map((item: any) => (
                       <Stack
                         key={item.date}
                       >
                         <TextField
-                          // label={`Ход: ${item.round}`}
                           disabled
-                          value={item.mainMoneyForAll}
+                          label={item.mainMoneyForAll}
+                          value={item.mainClearProfit}
+                          // value={item.mainMoneyForAll}
                         />
                       </Stack>
                     ))}

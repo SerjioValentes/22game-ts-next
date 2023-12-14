@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { useDispatch } from 'react-redux';
 import user from './user/slice';
+import cards from './cards/slice';
 
 const store = configureStore({
   reducer: {
     user,
+    cards,
   },
 });
 

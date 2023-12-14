@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box, Button, Dialog, DialogTitle, Divider, Stack, TextField, Typography,
+  Box, Button, ButtonGroup, Card, CardMedia, Dialog, DialogTitle, Divider, Stack, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import './style.scss';
@@ -24,6 +24,8 @@ const FirstSection = () => {
   const [dialogNote, setDialogNote] = useState('');
   // Accordion opening control
   const [isFirstAccOpen, setIsFirstAccOpen] = useState(false);
+  const [isCardsAccOpen, setIsCardsAccOpen] = useState(false);
+  const [randomCard, setRandomCard] = useState<string>('');
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
@@ -38,8 +40,6 @@ const FirstSection = () => {
     };
 
     if (functionConst === 'nothing') {
-      // const localEachUserData = window.localStorage.getItem('inputValues');
-      // if (localEachUserData) {
       disapatchCorrectValues = {
         ...eachUserData,
         firstShows: '',
@@ -70,8 +70,6 @@ const FirstSection = () => {
     const sells = getNormalNumber(disapatchCorrectValues.varSells); // Продажи - Переменные расходы
     const taxes = getNormalNumber(disapatchCorrectValues.varTaxes); // Налоги - Переменные расходы
     const sellRegularPayClients = getNormalNumber(disapatchCorrectValues.sellRegularPay); // Клиенты (платят регулярно) - Воронка продаж
-    // let mainMoneyFor = getNormalNumber(disapatchCorrectValues.mainMoneyFor); // Денег на расч / счете - Основное поле
-    // const mainMoneyForAll = getNormalNumber(disapatchCorrectValues.mainMoneyForAll); // Денег на расч / счете подсчитанное значени - Основное поле
 
     // Calculations <<< ----------------------------------------------------
     const firstApplications = Math.round((shows * firstCv1) / 100); // Заявки - Разовая воронка
@@ -90,9 +88,7 @@ const FirstSection = () => {
     const totalCosts = Math.round(constantCostsFotOwner + constantCostsFot + constantCostsCreditPay + constAddField); // Итого - Постоянные расходы
     const mainCostsFieldClearProfit = Math.round(revenue - (varCostsTotalCosts + totalCosts)); // Чистая прибыль - Основное поле
 
-    // if (disapatchCorrectValues.round !== 0) {
     const mainMoneyFor = Math.round(mainCostsFieldClearProfit * percClearProf + firstFunProfit); // Денег на расч / счете - Основное поле
-    // }
 
     disapatchCorrectValues = {
       ...disapatchCorrectValues,
@@ -181,9 +177,20 @@ const FirstSection = () => {
     }
   };
 
+  const getRandomInt = (max: any) => Math.floor(Math.random() * max) + 1;
+
+  // const changeData = (data: string) => {
+  //   setWhatToShow(data);
+  // };
+
+  const handleChooseCard = (card: string) => {
+    const randCard = getRandomInt(Object.keys(card).length);
+    setRandomCard(`/assets/web/${card}/cards/${randCard}.jpg`);
+  };
+
   useEffect(() => {
     textFieldOnChange('', 'nothing');
-  }, [eachUserData.round]);
+  }, [eachUserData?.round]);
 
   return (
     <Stack>
@@ -192,19 +199,17 @@ const FirstSection = () => {
         spacing={2}
       >
         {/* Start ---------------- РАЗОВАЯ ВОРОНКА --------------- Start */}
-        <Stack maxWidth={200}>
+        <Stack minWidth={400} maxWidth={400}>
           <Accordion
             onChange={() => setIsFirstAccOpen(!isFirstAccOpen)}
             expanded={isFirstAccOpen}
             sx={{
+              borderRadius: 1,
               backgroundColor: 'rgba(57, 105, 125, 0.5)',
               border: '1px solid white',
             }}
           >
-            <AccordionSummary
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
+            <AccordionSummary>
               <InputTitleWrapper>Разовая воронка</InputTitleWrapper>
             </AccordionSummary>
             <AccordionDetails>
@@ -227,8 +232,119 @@ const FirstSection = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
+          {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
+          <Accordion
+            onChange={() => setIsCardsAccOpen(!isCardsAccOpen)}
+            expanded={isCardsAccOpen}
+            sx={{
+              borderRadius: 1,
+              backgroundColor: 'rgba(57, 105, 125, 0.5)',
+              mt: 2,
+              border: '1px solid white',
+            }}
+          >
+            <AccordionSummary
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <InputTitleWrapper>Карточки</InputTitleWrapper>
+            </AccordionSummary>
+            <AccordionDetails>
+
+              <Box sx={{
+                borderRadius: 2,
+              }}
+              >
+                <Stack>
+
+                  <ButtonGroup
+                    orientation="vertical"
+                    variant="contained"
+                    fullWidth
+                  >
+                    <Button
+                      sx={{
+                        backgroundColor: randomCard.split('/').includes('brand') ? '#9a2a3b' : '#fff',
+                        color: randomCard.split('/').includes('brand') ? '#fff' : '#000',
+                        fontWeight: 'bold',
+                      }}
+                      variant="contained"
+                      onClick={() => handleChooseCard('brand')}
+                    >
+                      Брэнд
+                    </Button>
+                    <Button
+                      sx={{
+                        backgroundColor: randomCard.split('/').includes('finance') ? '#295742' : '#fff',
+                        color: randomCard.split('/').includes('finance') ? '#fff' : '#000',
+                        fontWeight: 'bold',
+                      }}
+                      variant="contained"
+                      onClick={() => handleChooseCard('finance')}
+                    >
+                      Финансы
+
+                    </Button>
+                    <Button
+                      sx={{
+                        backgroundColor: randomCard.split('/').includes('marketing') ? '#422e67' : '#fff',
+                        color: randomCard.split('/').includes('marketing') ? '#fff' : '#000',
+                        fontWeight: 'bold',
+                      }}
+                      variant="contained"
+                      onClick={() => handleChooseCard('marketing')}
+                    >
+                      Маркетинг
+
+                    </Button>
+                    <Button
+                      sx={{
+                        backgroundColor: randomCard.split('/').includes('products') ? '#233c4f' : '#fff',
+                        color: randomCard.split('/').includes('products') ? '#fff' : '#000',
+                        fontWeight: 'bold',
+                      }}
+                      variant="contained"
+                      onClick={() => handleChooseCard('products')}
+                    >
+                      Продукт
+
+                    </Button>
+                    <Button
+                      sx={{
+                        backgroundColor: randomCard.split('/').includes('sells') ? '#852c2f' : '#fff',
+                        color: randomCard.split('/').includes('sells') ? '#fff' : '#000',
+                        fontWeight: 'bold',
+                      }}
+                      variant="contained"
+                      onClick={() => handleChooseCard('sells')}
+                    >
+                      Продажи
+
+                    </Button>
+                  </ButtonGroup>
+                  <Box>
+                    <Card sx={{
+                      // maxWidth: 200,
+                      mx: 'auto',
+                      mt: 2,
+                    }}
+                    >
+                      {randomCard
+
+    && (
+    <CardMedia
+      sx={{ height: '550px' }}
+      image={randomCard}
+      title={randomCard}
+    />
+    )}
+                    </Card>
+                  </Box>
+                </Stack>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
         </Stack>
-        {/* End ---------------- РАЗОВАЯ ВОРОНКА --------------- End */}
 
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
         <Stack

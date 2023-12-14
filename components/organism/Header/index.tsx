@@ -24,6 +24,60 @@ const Header = ({ setIsUserLogged }: any) => {
   const { allRoundsData, mainUserInfo } = useAppSelector((state) => state.user);
   const eachUserData = useAppSelector((state) => state.user.data);
 
+  const resetEachPlayer = {
+    round: 0,
+    date: '',
+    savedNotes: [],
+    firstShows: '',
+    firstCv1: '',
+    firstApplications: '',
+    firstCv2: '',
+    firstSells: '',
+    firstBill: '',
+    firstRevenue: '',
+    firstSpends: '',
+    firstProfit: '',
+    sellShows: '',
+    sellCV1: '',
+    sellApplications: '',
+    sellCV2: '',
+    sellSells: '',
+    sellCV3: '',
+    sellConstClients: '',
+    sellTotalSells: '',
+    sellRegularPay: '0',
+    sellBill: '',
+    sellRevenue: '',
+    varSells: '',
+    varCosts: '',
+    varMarketing: '',
+    varTaxes: '',
+    varTotalPercent: '',
+    varTotalCosts: '',
+    constFotOwner: '',
+    constFot: '',
+    constCreditAll: '',
+    constCreditPay: '',
+    constTotalCosts: '',
+    mainCosts: '',
+    percentClearProfit: '1',
+    mainClearProfit: '',
+    mainMoneyFor: '',
+    mainMoneyForAll: '',
+    mainPersonalCapital: '',
+    constAddField: '',
+    nothing: '',
+  };
+
+  const resetMainInfo = {
+    mainUserInfo: {
+      name: '',
+      bussiness: '',
+      gamePlan: '',
+      gameRequest: '',
+    },
+  };
+
   const handleOnChange = (value: any, gameValue: string) => {
     dispatch(setMainUserInfo({
       ...mainUserInfo,
@@ -103,58 +157,6 @@ const Header = ({ setIsUserLogged }: any) => {
   };
 
   const handleLogOut = () => {
-    const resetMainInfo = {
-      mainUserInfo: {
-        name: '',
-        bussiness: '',
-        gamePlan: '',
-        gameRequest: '',
-      },
-    };
-    const resetEachPlayer = {
-      round: 0,
-      date: '',
-      savedNotes: [],
-      firstShows: '',
-      firstCv1: '',
-      firstApplications: '',
-      firstCv2: '',
-      firstSells: '',
-      firstBill: '',
-      firstRevenue: '',
-      firstSpends: '',
-      firstProfit: '',
-      sellShows: '',
-      sellCV1: '',
-      sellApplications: '',
-      sellCV2: '',
-      sellSells: '',
-      sellCV3: '',
-      sellConstClients: '',
-      sellTotalSells: '',
-      sellRegularPay: '0',
-      sellBill: '',
-      sellRevenue: '',
-      varSells: '',
-      varCosts: '',
-      varMarketing: '',
-      varTaxes: '',
-      varTotalPercent: '',
-      varTotalCosts: '',
-      constFotOwner: '',
-      constFot: '',
-      constCreditAll: '',
-      constCreditPay: '',
-      constTotalCosts: '',
-      mainCosts: '',
-      percentClearProfit: '1',
-      mainClearProfit: '',
-      mainMoneyFor: '',
-      mainMoneyForAll: '',
-      mainPersonalCapital: '',
-      constAddField: '',
-      nothing: '',
-    };
     dispatch(setMainUserInfo(resetMainInfo));
     dispatch(setEachPlayerData(resetEachPlayer));
     setUserEmail(null);
@@ -179,10 +181,15 @@ const Header = ({ setIsUserLogged }: any) => {
     label: 'Запрос на игру',
   }];
 
-  const goToAdminPage = (e: any) => {
-    e.preventDefault();
-    // router.push('/admin');
-  };
+  // const goToAdminPage = (e: any) => {
+  //   e.preventDefault();
+  // };
+
+  // const startFromBegin = () => {
+  // setDataToFire(resetEachPlayer);
+  // dispatch(setMainUserInfo(resetMainInfo));
+  // dispatch(setEachPlayerData(resetEachPlayer));
+  // };
 
   return (
     <Box sx={{
@@ -252,17 +259,9 @@ const Header = ({ setIsUserLogged }: any) => {
               </MenuItem>
             )
             : (
-              <>
-                <MenuItem onClick={handleLogOut}>
-                  <Typography onClick={handleLogOut}>Выйти</Typography>
-                </MenuItem>
-                {userEmail === 'admin@user.com'
-                && (
-                  <MenuItem onClick={goToAdminPage}>
-                    <Typography>Управление</Typography>
-                  </MenuItem>
-                )}
-              </>
+              <MenuItem onClick={handleLogOut}>
+                <Typography onClick={handleLogOut}>Выйти</Typography>
+              </MenuItem>
             )}
         </Menu>
       </Box>

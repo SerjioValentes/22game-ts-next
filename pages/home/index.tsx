@@ -165,7 +165,6 @@ const HomePage = () => {
       backgroundImage: 'url(/assets/bg/background.jpg)',
     }}
     >
-      {/* <Button onClick={getSomeInfo}>showME</Button> */}
       <div>
         <div>
           <Header setIsUserLogged={setIsUserLogged} />
