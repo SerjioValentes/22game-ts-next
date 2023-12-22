@@ -271,7 +271,7 @@ const FirstSection = () => {
                       variant="contained"
                       onClick={() => handleChooseCard('brand')}
                     >
-                      Брэнд
+                      Бренд
                     </Button>
                     <Button
                       sx={{
