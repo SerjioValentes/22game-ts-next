@@ -114,24 +114,20 @@ const Header = ({ setIsUserLogged }: any) => {
   const endRound = () => {
     const constantClients = getNormalNumber(eachUserData.sellConstClients);
     const regularPayClients = getNormalNumber(eachUserData.sellRegularPay);
-    const mainMoneyForAll = getNormalNumber(eachUserData.mainMoneyForAll);
-    const mainMoneyFor = getNormalNumber(eachUserData.mainMoneyFor);
+    const mainMoneyForAll = getNormalNumber(eachUserData.mainMoneyForAll); // Денег на р/с
+    const mainMoneyFor = getNormalNumber(eachUserData.mainMoneyFor); // Чистая прибыль
+
+    const { round } = eachUserData;
 
     const eachUser = {
       ...eachUserData,
       sellRegularPay: String(regularPayClients + constantClients),
-      mainMoneyForAll: (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
-      round: eachUserData.round + 1,
+      mainMoneyForAll: round === 0 ? mainMoneyForAll.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : (mainMoneyFor + mainMoneyForAll).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
+      round: round + 1,
       date: new Date().toISOString(),
     };
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // TODO - AllRounds data will add again in each round !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const allRoundsDataL = [...allRoundsData, eachUser];
-    // ...eachUserData,
-
-    // TODO - Doesn't have free space in localStorage - resolve with firestore DB maybe
     window.localStorage.setItem('inputValues', JSON.stringify(eachUser));
 
     dispatch(setEachPlayerData(eachUser));
@@ -153,7 +149,6 @@ const Header = ({ setIsUserLogged }: any) => {
   };
   const handleLogInUser = () => {
     setAnchorElUser(null);
-    // setIsNewUser(false);
   };
 
   const handleLogOut = () => {
@@ -180,16 +175,6 @@ const Header = ({ setIsUserLogged }: any) => {
     name: 'gameRequest',
     label: 'Запрос на игру',
   }];
-
-  // const goToAdminPage = (e: any) => {
-  //   e.preventDefault();
-  // };
-
-  // const startFromBegin = () => {
-  // setDataToFire(resetEachPlayer);
-  // dispatch(setMainUserInfo(resetMainInfo));
-  // dispatch(setEachPlayerData(resetEachPlayer));
-  // };
 
   return (
     <Box sx={{
