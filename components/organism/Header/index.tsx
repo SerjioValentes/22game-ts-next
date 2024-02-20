@@ -212,7 +212,7 @@ const Header = ({ setIsUserLogged }: any) => {
         variant="contained"
         onClick={getEachUserData}
       >
-        {eachUserData?.round === 0 ? 'Начать игру' : 'Завершить'}
+        {eachUserData?.round === 0 ? 'Начать игру' : 'Применить ход'}
       </Button>
 
       {headerInputs.map((item: any) => (

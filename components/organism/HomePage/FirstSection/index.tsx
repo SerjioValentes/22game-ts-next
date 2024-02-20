@@ -25,7 +25,10 @@ const FirstSection = () => {
   // Accordion opening control
   const [isFirstAccOpen, setIsFirstAccOpen] = useState(false);
   const [isCardsAccOpen, setIsCardsAccOpen] = useState(false);
+  const [isCubeRandom, setIsCubeRandom] = useState(false);
+
   const [randomCard, setRandomCard] = useState<string>('');
+  const [randomNumber, setRandomNumber] = useState<number | null>(null);
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
@@ -179,10 +182,6 @@ const FirstSection = () => {
 
   const getRandomInt = (max: any) => Math.floor(Math.random() * max) + 1;
 
-  // const changeData = (data: string) => {
-  //   setWhatToShow(data);
-  // };
-
   const handleChooseCard = (card: string) => {
     const randCard = getRandomInt(Object.keys(card).length);
     setRandomCard(`/assets/web/${card}/cards/${randCard}.jpg`);
@@ -191,6 +190,9 @@ const FirstSection = () => {
   useEffect(() => {
     textFieldOnChange('', 'nothing');
   }, [eachUserData?.round]);
+
+  // ------------------------------- Random number for Cube calculation
+  const getRandomNumber = () => setRandomNumber(Math.floor(Math.random() * 6 + 1));
 
   return (
     <Stack>
@@ -344,6 +346,37 @@ const FirstSection = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
+          {/* Start ---------------- Random Cube Accordion --------------- Start */}
+          <Accordion
+            onChange={() => setIsCubeRandom(!isCubeRandom)}
+            expanded={isCubeRandom}
+            sx={{
+              borderRadius: 1,
+              backgroundColor: 'rgba(57, 105, 125, 0.5)',
+              mt: 2,
+              border: '1px solid white',
+            }}
+          >
+            <AccordionSummary
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <InputTitleWrapper>Кубик</InputTitleWrapper>
+            </AccordionSummary>
+            <AccordionDetails sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+            >
+              <Typography variant="h5" color="#fff">
+                {randomNumber && randomNumber}
+              </Typography>
+              <Button variant="contained" onClick={getRandomNumber}>Бросить кубик</Button>
+            </AccordionDetails>
+          </Accordion>
+          {/* End ---------------- Random Cube Accordion --------------- End */}
+
         </Stack>
 
         {/* Start ---------------- ВОРОНКА ПРОДАЖ --------------- Start */}
