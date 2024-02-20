@@ -32,9 +32,7 @@ const FirstSection = () => {
 
   const dispatch = useAppDispatch();
   const eachUserData: any = useAppSelector((state) => state.user.data);
-  // const savedNotes: any = useAppSelector((state) => state.user.savedNotes);
   const isMobileSize = useWindowSize();
-  // const neverFunc = () => {};
 
   const textFieldOnChange = (value: string, functionConst: string) => {
     let disapatchCorrectValues = {
@@ -50,13 +48,13 @@ const FirstSection = () => {
         firstCv2: '',
         firstBill: '',
       };
-      // }
     }
 
     // Constants <<< ----------------------------------------------------
     const shows = getNormalNumber(disapatchCorrectValues.firstShows); // Показы - Разовая воронка
     const firstCv1 = getNormalNumber(disapatchCorrectValues.firstCv1); // CV1 - Разовая воронка
     const firstCv2 = getNormalNumber(disapatchCorrectValues.firstCv2); // CV2 - Разовая воронка
+    let firstSells = getNormalNumber(disapatchCorrectValues.firstSells); // Продажи - Разовая воронка
     const firstBill = getNormalNumber(disapatchCorrectValues.firstBill); // Средний чек - Разовая воронка
     const sellCV1 = getNormalNumber(disapatchCorrectValues.sellCV1); // CV1 - Воронка продаж
     const sellFunnelCv2 = getNormalNumber(disapatchCorrectValues.sellCV2); // CV2 - Воронка продаж
@@ -76,11 +74,18 @@ const FirstSection = () => {
 
     // Calculations <<< ----------------------------------------------------
     const firstApplications = Math.round((shows * firstCv1) / 100); // Заявки - Разовая воронка
-    const firstSells = Math.round((firstCv2 * firstApplications) / 100); // Продажи - Разовая воронка
     const applications = Math.round((sellCV1 * sellShows) / 100); // Заявки - Воронка продаж
+
+    if (functionConst === 'shows' || functionConst === 'firstCv1' || functionConst === 'firstCv2' || functionConst === 'firstApplications') {
+      firstSells = Math.round((firstCv2 * firstApplications) / 100); // Продажи - Разовая воронка
+    }
+
+    if (functionConst === 'firstSells') {
+      firstSells = getNormalNumber(value.replaceAll(' ', '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ')); // Продажи - Разовая воронка
+    }
+
     const funnelSell = Math.round((applications * sellFunnelCv2) / 100); // Продажи - Воронка продаж
     const onceEarning = Math.round(firstSells * firstBill); // Выручка - Разовая воронка
-
     const sellConstantClients = Math.round((funnelCv3 * funnelSell) / 100); // Постоянные клиенты - Воронка продаж
     const revenue = Math.round(sellBill * (sellRegularPayClients + funnelSell + sellConstantClients)); // Выручка - Воронка продаж
     const varCostsTotalPercent = Math.round(sells + obligations + marketing + taxes); // Итого от выручки - Переменные расходы

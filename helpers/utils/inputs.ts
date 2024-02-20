@@ -27,7 +27,7 @@ const inputList = {
     {
       label: 'Продажи',
       functionConst: 'firstSells',
-      disabled: true,
+      disabled: false,
       inputProps: '',
     },
     {
